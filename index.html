@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="main.css" />
+    <title>RPGBattle</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="characters">
+        <div onclick="selectHero('warrior')" id="warrior" class="character">
+          <div class="character-name">
+            <span>Warrior</span>
+          </div>
+          <div class="charcter-info">
+            <div class="character-image">
+              <img
+                src="assets/characters/heros/warrior/Preview.gif"
+                alt="warrior"
+              />
+            </div>
+            <div class="character-stats">
+              <ul>
+                <li>
+                  <span>HP:</span>
+                  <span id="warrior-hp">100</span>
+                </li>
+                <li>
+                  <span>Str:</span>
+                  <span id="warrior-str">100</span>
+                </li>
+                <li>
+                  <span>Def:</span>
+                  <span id="warrior-def">100</span>
+                </li>
+                <li>
+                  <span>speed:</span>
+                  <span id="warrior-speed">100</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div onclick="selectHero('mage')" id="mage" class="character">
+          <div class="character-name">
+            <span>Mage</span>
+          </div>
+          <div class="charcter-info">
+            <div class="character-image">
+              <img src="assets/characters/heros/mage/mage.png" alt="warrior" />
+            </div>
+            <div class="character-stats">
+              <ul>
+                <li>
+                  <span>HP:</span>
+                  <span id="warrior-hp">100</span>
+                </li>
+                <li>
+                  <span>Str:</span>
+                  <span id="warrior-str">100</span>
+                </li>
+                <li>
+                  <span>Def:</span>
+                  <span id="warrior-def">100</span>
+                </li>
+                <li>
+                  <span>speed:</span>
+                  <span id="warrior-speed">100</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div id="mage" class="character">mage</div>
+        <div id="assassins" class="character">assassins</div>
+        <div id="hunter" class="character">hunter</div> -->
+      </div>
+      <div class="start">
+        <button onclick="startGame()" id="start">Start</button>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
