@@ -43,6 +43,7 @@
             </div>
           </div>
         </div>
+
         <div onclick="selectHero('mage')" id="mage" class="character">
           <div class="character-name">
             <span>Mage</span>
@@ -55,32 +56,76 @@
               <ul>
                 <li>
                   <span>HP:</span>
-                  <span id="warrior-hp">100</span>
+                  <span id="mage-hp">100</span>
                 </li>
                 <li>
                   <span>Str:</span>
-                  <span id="warrior-str">100</span>
+                  <span id="mage-str">100</span>
                 </li>
                 <li>
                   <span>Def:</span>
-                  <span id="warrior-def">100</span>
+                  <span id="mage-def">100</span>
                 </li>
                 <li>
                   <span>speed:</span>
-                  <span id="warrior-speed">100</span>
+                  <span id="mage-speed">100</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+         <div class="enemies">
+         <div class="enemy-name">
+            <span id="enemy-name"></span>
+          </div>
+          <div class="enemy-info">
+            <div class="enemy-image">
+              <img id="enemy-image"
+
+                alt="enemy"
+              />
+            </div>
+            <div class="enemy-stats">
+              <ul>
+                <li>
+                  <span>HP:</span>
+                  <span id="enemy-hp">100</span>
+                </li>
+                <li>
+                  <span>Str:</span>
+                  <span id="enemy-str">100</span>
+                </li>
+                <li>
+                  <span>Def:</span>
+                  <span id="enemy-def">100</span>
+                </li>
+                <li>
+                  <span>speed:</span>
+                  <span id="enemy-speed">100</span>
                 </li>
               </ul>
             </div>
           </div>
         </div>
 
-        <!-- <div id="mage" class="character">mage</div>
-        <div id="assassins" class="character">assassins</div>
-        <div id="hunter" class="character">hunter</div> -->
       </div>
-      <div class="start">
+        <div class="actions">
+          <div class="start">
         <button onclick="startGame()" id="start">Start</button>
       </div>
+      <div class="actionsButtons">
+        <button  id="attack">Attack</button>
+        <button id="defend">Defend</button>
+        <button  id="special">Special</button>
+      </div>
+        </div>
+        <div class="log">
+          <div id="log">
+            <span id="text"></span>
+          </div>
+        </div>
+      </div>
+
     </div>
     <script src="app.js"></script>
   </body>
