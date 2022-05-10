@@ -1,82 +1,90 @@
 let warrior = {
-  name: '',
+  name: 'Warrior',
   health: 100,
-  strength: 10,
-  defense: 9,
-  speed: 6,
-  intelligence: 2,
+  strength: 17,
+  defense: 16,
+  speed: 13,
+  intelligence: 11,
   heroClass: 'warrior',
+  criticalChance: 15,
+  specialAttack: 'Sword Slash',
 };
 
 let mage = {
-  name: '',
-  health: 110,
-  strength: 6,
-  defense: 7,
-  speed: 7,
-  intelligence: 10,
+  name: 'Mage',
+  health: 100,
+  strength: 7,
+  defense: 17,
+  speed: 16,
+  intelligence: 17,
   heroClass: 'mage',
+  criticalChance: 14,
+  specialAttack: 'Fireball meteor',
 };
 let hero;
 
 let assassins = {
-  name: '',
+  name: 'Assassins',
   health: 100,
-  strength: 6,
-  defense: 7,
-  speed: 10,
-  intelligence: 5,
+  strength: 15,
+  defense: 15,
+  speed: 17,
+  intelligence: 16,
   heroClass: 'assassins',
+  criticalChance: 19,
+  specialAttack: 'Blade of death',
 };
 
 let hunter = {
-  name: '',
+  name: 'Hunter',
   health: 100,
-  strength: 7,
-  defense: 5,
-  speed: 8,
-  intelligence: 7,
+  strength: 13,
+  defense: 16,
+  speed: 16,
+  intelligence: 11,
   heroClass: 'hunter',
+  criticalChance: 14,
+  specialAttack: 'Arrow of blood',
 };
 
 let enemies = [
   {
+    name: 'Orc',
+    health: 100,
+    strength: 16,
+    defense: 12,
+    speed: 16,
+    intelligence: 6,
+    enemyImg:
+      'https://thumbs.dreamstime.com/z/vector-pixel-art-wolf-head-isolated-cartoon-127963772.jpg',
+  },
+  {
     name: 'Goblin',
     health: 100,
-    strength: 10,
-    defense: 9,
-    speed: 6,
-    intelligence: 2,
+    strength: 11,
+    defense: 10,
+    speed: 10,
+    intelligence: 8,
     enemyImg:
       'https://thumbs.dreamstime.com/z/vector-pixel-art-wolf-head-isolated-cartoon-127963772.jpg',
   },
   {
-    name: 'vampire',
+    name: 'Gnoll',
     health: 100,
-    strength: 10,
-    defense: 9,
-    speed: 6,
-    intelligence: 2,
+    strength: 16,
+    defense: 12,
+    speed: 10,
+    intelligence: 6,
     enemyImg:
       'https://thumbs.dreamstime.com/z/vector-pixel-art-wolf-head-isolated-cartoon-127963772.jpg',
   },
   {
-    name: 'wolf',
+    name: 'Half orc',
     health: 100,
-    strength: 10,
-    defense: 9,
-    speed: 6,
-    intelligence: 2,
-    enemyImg:
-      'https://thumbs.dreamstime.com/z/vector-pixel-art-wolf-head-isolated-cartoon-127963772.jpg',
-  },
-  {
-    name: 'ifLoco',
-    health: 100,
-    strength: 10,
-    defense: 9,
-    speed: 6,
-    intelligence: 2,
+    strength: 14,
+    defense: 13,
+    speed: 11,
+    intelligence: 8,
     enemyImg:
       'https://thumbs.dreamstime.com/z/vector-pixel-art-wolf-head-isolated-cartoon-127963772.jpg',
   },
@@ -147,6 +155,7 @@ function hideRestOfHeros(heroClass) {
       break;
   }
 }
+let playerHits = 0;
 let logText = document.querySelector('#text');
 function startGame() {
   console.log('start game');
@@ -157,7 +166,7 @@ function startGame() {
   hideRestOfHeros(hero.heroClass);
   let enemy = randomEnemy();
   document.querySelector('.enemies').style.display = 'inline-block';
-
+  document.querySelector('#special').disabled = true;
   document.querySelector('#attack').addEventListener('click', function () {
     console.log('attack');
     playerAttack(hero, enemy);
@@ -165,6 +174,12 @@ function startGame() {
   document.querySelector('#defend').addEventListener('click', function () {
     console.log('defense');
     playerDefense(hero, enemy);
+  });
+
+  document.querySelector('#special').addEventListener('click', function () {
+    console.log('special');
+    playerSpecial(hero, enemy);
+    document.querySelector('#special').disabled = true;
   });
 }
 
@@ -191,46 +206,72 @@ setHeroStatus();
 document.querySelector('.enemies').style.display = 'none';
 
 function playerAttack(player, target) {
-  // logText.innerHTML = '';
-  // let damage = Math.floor(Math.random() * 9) + 1;
-  //let enemy = enemies[Math.floor(Math.random() * enemies.length)];
   let damage = Math.floor(Math.random() * player.strength) * 1.5;
-  if (damage == 9) {
+  let enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
+  if (enemyDefendNumber >= 7) {
+    enemyDefend(target, player);
+  }
+  console.log(playerHits, '1');
+  playerHits++;
+  if (playerHits == 7) {
+    document.querySelector('#special').disabled = false;
+    console.log('se dispara el especial');
+    playerHits = 0;
+  }
+
+  console.log(playerHits, '2');
+  if (damage == player.criticalChance) {
     console.info('critical hit');
     damage = Math.floor(Math.random() * player.strength) * 3;
+    generateText(
+      `${player.name} critically hit ${target.name} for ${damage} damage`
+    );
   }
   target.health -= damage;
   document.querySelector('#enemy-hp').innerHTML = target.health;
 
-  // logText.innerHTML += `Player hit ${target.name} for ${damage} damage.`;
   generateText(`Player hit ${target.name} for ${damage} damage.`);
-  console.log('player damage', damage);
-  // let critical = Math.floor(Math.random() * 5);
-  enemyAttack(target, player);
+
+  setTimeout(() => {
+    enemyAttack(target, player);
+  }, 3000);
   let rndNumber = randomNumber();
-  // if (rndNumber > 7) {
-  //   console.log('critical hit');
-  // }
 }
+
 function generateText(text) {
   logText.innerHTML = '';
 
   return (logText.innerHTML = text);
 }
+
 function enemyAttack(enemy, target) {
   let damage = Math.floor(Math.random() * enemy.strength) * 1.5;
+  generateText(`${enemy.name} hit ${target.heroClass} for ${damage} damage.`);
   target.health -= damage;
-  console.log('enemy damage', damage);
+
   document.querySelector(`#${target.heroClass}-hp`).innerHTML = target.health;
 }
 
 function playerDefense(player, enemy) {
-  let damage = enemy.strength - player.defense;
-  player.health -= damage;
-  document.querySelector(`#${player.heroClass}-hp`).innerHTML = player.health;
+  generateText(`${player.name} is defending.`);
+  let damage = player.defense - enemy.strength;
 
-  generateText(`Player defended, take ${damage} damage.`);
-  console.log('enemy damage on defense', damage);
+  setTimeout(() => {
+    generateText(`${enemy.name} hit ${player.name} for ${damage} damage.`);
+    player.health -= damage;
+    document.querySelector(`#${player.heroClass}-hp`).innerHTML = player.health;
+  }, 4000);
+}
+
+function enemyDefend(enemy, player) {
+  // generateText(`${enemy.name} is defending.`);
+  // let damage = enemy.defense - player.strength;
+  let damage = player.defense - enemy.strength;
+  setTimeout(() => {
+    generateText(`${enemy.name}  is defending, get ${damage} damage.`);
+    enemies.health -= damage;
+    document.querySelector('#enemy-hp').innerHTML = enemy.health;
+  }, 5000);
 }
 
 function randomEnemy() {
@@ -241,6 +282,23 @@ function randomEnemy() {
 }
 
 function randomNumber() {
-  const number = Math.floor(Math.random() * 13);
+  const number = Math.floor(Math.random() * 99);
   return number;
+}
+
+function playerSpecial(player, enemy) {
+  let damage = player.strength * 2.5;
+  generateText(
+    `${player.name} is using special : ${player.specialAttack}, generate ${damage}  damage to ${enemy.name}.`
+  );
+  let enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
+  if (enemyDefendNumber >= 7) {
+    enemyDefend(enemy, player);
+  }
+  enemy.health -= damage;
+  document.querySelector('#enemy-hp').innerHTML = enemy.health;
+
+  setTimeout(() => {
+    enemyAttack(enemy, player);
+  }, 3000);
 }
