@@ -5,7 +5,7 @@ let warrior = {
   defense: 16,
   speed: 13,
   intelligence: 11,
-  heroClass: 'warrior',
+  characterClass: 'warrior',
   criticalChance: 15,
   specialAttack: 'Sword Slash',
 };
@@ -17,7 +17,7 @@ let mage = {
   defense: 17,
   speed: 16,
   intelligence: 17,
-  heroClass: 'mage',
+  characterClass: 'mage',
   criticalChance: 14,
   specialAttack: 'Fireball meteor',
 };
@@ -30,7 +30,7 @@ let assassins = {
   defense: 15,
   speed: 17,
   intelligence: 16,
-  heroClass: 'assassins',
+  characterClass: 'assassins',
   criticalChance: 19,
   specialAttack: 'Blade of death',
 };
@@ -42,7 +42,7 @@ let hunter = {
   defense: 16,
   speed: 16,
   intelligence: 11,
-  heroClass: 'hunter',
+  characterClass: 'hunter',
   criticalChance: 14,
   specialAttack: 'Arrow of blood',
 };
@@ -50,6 +50,7 @@ let hunter = {
 let enemies = [
   {
     name: 'Orc',
+    characterClass: 'enemy',
     health: 100,
     strength: 16,
     defense: 12,
@@ -60,6 +61,7 @@ let enemies = [
   },
   {
     name: 'Goblin',
+    characterClass: 'enemy',
     health: 100,
     strength: 11,
     defense: 10,
@@ -70,6 +72,7 @@ let enemies = [
   },
   {
     name: 'Gnoll',
+    characterClass: 'enemy',
     health: 100,
     strength: 16,
     defense: 12,
@@ -80,6 +83,7 @@ let enemies = [
   },
   {
     name: 'Half orc',
+    characterClass: 'enemy',
     health: 100,
     strength: 14,
     defense: 13,
@@ -90,45 +94,45 @@ let enemies = [
   },
 ];
 
-function selectHero(heroClass) {
-  console.log(`You have selected ${heroClass}`);
+function selectHero(characterClass) {
+  // console.log(`You have selected ${characterClass}`);
 
-  switch (heroClass) {
+  switch (characterClass) {
     case 'warrior':
       hero = warrior;
-      console.log(hero, 'warrior');
+      // console.log(hero, 'warrior');
 
       break;
 
     case 'mage':
       hero = mage;
-      console.log(hero, 'hide mage');
+      // console.log(hero, 'hide mage');
       break;
 
     case 'assassins':
       hero = assassins;
-      console.log(hero, 'assassins');
+      // console.log(hero, 'assassins');
       break;
 
     case 'hunter':
       hero = hunter;
-      console.log(hero, 'hunter');
+      // console.log(hero, 'hunter');
       break;
 
     default:
       hero = warrior;
-      console.log(hero, 'default warrior');
+      // console.log(hero, 'default warrior');
       break;
   }
 }
 
-function hideRestOfHeros(heroClass) {
-  switch (heroClass) {
+function hideRestOfHeros(characterClass) {
+  switch (characterClass) {
     case 'warrior':
       document.getElementById('mage').style.display = 'none';
       // document.getElementById('assassins').style.display = 'none';
       // document.getElementById('hunter').style.display = 'none';
-      console.log('hererere');
+      // console.log('hererere');
       break;
     case 'mage':
       document.getElementById('warrior').style.display = 'none';
@@ -156,33 +160,67 @@ function hideRestOfHeros(heroClass) {
   }
 }
 let playerHits = 0;
+let turns;
 let logText = document.querySelector('#text');
+
 function startGame() {
-  console.log('start game');
+  // console.log('start game');
   if (hero == undefined) {
     hero = warrior;
     return;
   }
-  hideRestOfHeros(hero.heroClass);
+
+  document.querySelector('.actions').style.display = 'inline-flex';
+  document.querySelector('.log').style.display = 'inline-flex';
+  document.querySelector('.start').style.display = 'none';
+  document.querySelector('.container').style.backgroundImage =
+    "url('./assets/images/battleback1-2.png')";
+  hideRestOfHeros(hero.characterClass);
   let enemy = randomEnemy();
-  document.querySelector('.enemies').style.display = 'inline-block';
+  document.querySelector('.enemies').style.display = 'inline-flex';
   document.querySelector('#special').disabled = true;
+  whoGoFirst(hero, enemy);
+  // }
   document.querySelector('#attack').addEventListener('click', function () {
-    console.log('attack');
-    playerAttack(hero, enemy);
+    // console.log('attack');
+    heroTurn(hero, enemy);
   });
   document.querySelector('#defend').addEventListener('click', function () {
-    console.log('defense');
-    playerDefense(hero, enemy);
+    // console.log('defense');
+    //playerDefense(hero, enemy);
+    characterDefense(hero, enemy);
   });
 
   document.querySelector('#special').addEventListener('click', function () {
-    console.log('special');
+    // console.log('special');
     playerSpecial(hero, enemy);
     document.querySelector('#special').disabled = true;
   });
 }
-
+function whoGoFirst(hero, enemy) {
+  if (hero.speed > enemy.speed) {
+    // console.log('turno del heroe');
+    generateText(`${hero.name}, es su turno`);
+  } else {
+    document.querySelector('#attack').disabled = true;
+    document.querySelector('#defend').disabled = true;
+    generateText(`${enemy.name} ha aparecido, es su turno!`);
+    // console.log('turno del enemigo');
+    enemyAttack(enemy, hero);
+    // enemyTurn(enemy);
+  }
+}
+function characterTurns(character, target) {
+  // if (turns == 'enemy') {
+  //   generateText(`Es el turno de ${character.name}!`);
+  //   characterAttack(character, target);
+  // } else {
+  //   generateText(`Es el turno de ${target.name}!`);
+  //   characterAttack(target, character);
+  // }
+  generateText(`Es el turno de ${character.name}!`);
+  characterAttack(character, target);
+}
 function setHeroStatus() {
   document.getElementById('warrior-hp').innerHTML = warrior.health;
   document.getElementById('warrior-str').innerHTML = warrior.strength;
@@ -205,33 +243,77 @@ function setEnemyStatus(enemy) {
 setHeroStatus();
 document.querySelector('.enemies').style.display = 'none';
 
-function playerAttack(player, target) {
-  let damage = Math.floor(Math.random() * player.strength) * 1.5;
-  let enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
+function characterAttack(character, target) {
+  let damage = Math.floor(Math.random() * character.strength) * 1.5;
+  //?comentado por el momento
+  // let enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
+  // if (enemyDefendNumber >= 7) {
+  //   console.log(character, 'sds');
+  //   characterDefense(target, character);
+  // }
+
+  // playerHits++;
+  // if (playerHits == 7) {
+  //   document.querySelector('#special').disabled = false;
+  //   console.log('se dispara el especial');
+  //   playerHits = 0;
+  // }
+
+  // if (damage == character.criticalChance) {
+  //   console.info('critical hit');
+  //   damage = Math.floor(Math.random() * character.strength) * 3;
+  //   generateText(
+  //     `${character.name} critically hit ${target.name} for ${damage} damage`
+  //   );
+  // }
+  target.health -= damage;
+
+  document.querySelector(`#${target.characterClass}-hp`).innerHTML =
+    target.health;
+
+  generateText(`${character.name} hit ${target.name} for ${damage} damage.`);
+
+  // characterTurns(target, character);
+  characterTurns(target, character);
+  // setTimeout(() => {
+  //   // enemyAttack(target, character);
+  //   characterTurns(target, character);
+  // }, 3000);
+  let rndNumber = randomNumber();
+}
+
+function heroTurn(player, target) {
+ let enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
   if (enemyDefendNumber >= 7) {
     enemyDefend(target, player);
+    return;
   }
-  console.log(playerHits, '1');
+  let damage = Math.floor(Math.random() * player.strength) * 1.5;
+
+  // console.log(playerHits, '1');
   playerHits++;
-  if (playerHits == 7) {
+  console.log(playerHits, 'playerHits');
+  if (playerHits === 7) {
     document.querySelector('#special').disabled = false;
-    console.log('se dispara el especial');
+    // console.log('se dispara el especial');
     playerHits = 0;
   }
 
-  console.log(playerHits, '2');
-  if (damage == player.criticalChance) {
-    console.info('critical hit');
+
+  if (damage === player.criticalChance) {
+    // console.info('critical hit');
     damage = Math.floor(Math.random() * player.strength) * 3;
     generateText(
       `${player.name} critically hit ${target.name} for ${damage} damage`
     );
   }
   target.health -= damage;
+  validateLife(target, player.name);
   document.querySelector('#enemy-hp').innerHTML = target.health;
 
   generateText(`Player hit ${target.name} for ${damage} damage.`);
-
+  document.querySelector('#attack').disabled = true;
+  document.querySelector('#defend').disabled = true;
   setTimeout(() => {
     enemyAttack(target, player);
   }, 3000);
@@ -241,42 +323,58 @@ function playerAttack(player, target) {
 function generateText(text) {
   logText.innerHTML = '';
 
-  return (logText.innerHTML = text);
+  return (logText.innerHTML += text);
 }
 
 function enemyAttack(enemy, target) {
+
   let damage = Math.floor(Math.random() * enemy.strength) * 1.5;
-  generateText(`${enemy.name} hit ${target.heroClass} for ${damage} damage.`);
+  generateText(`${enemy.name} hit ${target.characterClass} for ${damage} damage.`);
   target.health -= damage;
+  validateLife(target, enemy.name);
+  document.querySelector('#health').style.width = `${target.health}%`;
 
-  document.querySelector(`#${target.heroClass}-hp`).innerHTML = target.health;
+  document.querySelector(`#${target.characterClass}-hp`).innerHTML = target.health;
+  document.querySelector('#attack').disabled = false;
+  document.querySelector('#defend').disabled = false;
+}
+//?Por el momento se comenta
+function characterDefense(character, target) {
+  // console.log(character.characterClass, 'character.characterClass');
+  generateText(`${character.name} is defending.`);
+  let damage = character.defense - target.strength;
+  generateText(`${target.name} hit ${character.name} for ${damage} damage.`);
+  character.health -= damage;
+  document.querySelector(`#${character.characterClass}-hp`).innerHTML =
+    character.health;
+  // setTimeout(() => {
+  //   generateText(`${target.name} hit ${character.name} for ${damage} damage.`);
+  //   character.health -= damage;
+  //   document.querySelector(`#${character.characterClass}-hp`).innerHTML =
+  //     character.health;
+  // }, 4000);
 }
 
-function playerDefense(player, enemy) {
-  generateText(`${player.name} is defending.`);
-  let damage = player.defense - enemy.strength;
-
-  setTimeout(() => {
-    generateText(`${enemy.name} hit ${player.name} for ${damage} damage.`);
-    player.health -= damage;
-    document.querySelector(`#${player.heroClass}-hp`).innerHTML = player.health;
-  }, 4000);
-}
 
 function enemyDefend(enemy, player) {
-  // generateText(`${enemy.name} is defending.`);
+   generateText(`${enemy.name} is defending.`);
   // let damage = enemy.defense - player.strength;
   let damage = player.defense - enemy.strength;
-  setTimeout(() => {
-    generateText(`${enemy.name}  is defending, get ${damage} damage.`);
-    enemies.health -= damage;
-    document.querySelector('#enemy-hp').innerHTML = enemy.health;
-  }, 5000);
+  generateText(`${enemy.name}  is defending, get ${damage} damage.`);
+  enemies.health -= damage;
+  validateLife(enemy, player.name);
+  document.querySelector('#enemy-hp').innerHTML = enemy.health;
+  document.querySelector('#attack').disabled = false;
+  document.querySelector('#defend').disabled = false;
+  generateText(`${player.name} turn.`);
+  // setTimeout(() => {
+  //   generateText(`${player.name} turn.`);
+  // }, 1000);
 }
 
 function randomEnemy() {
   let enemy = enemies[Math.floor(Math.random() * enemies.length)];
-  console.log(enemy);
+  // console.log(enemy);
   setEnemyStatus(enemy);
   return enemy;
 }
@@ -296,9 +394,32 @@ function playerSpecial(player, enemy) {
     enemyDefend(enemy, player);
   }
   enemy.health -= damage;
+
+  validateLife(enemy, player.name);
   document.querySelector('#enemy-hp').innerHTML = enemy.health;
 
+  //enemyAttack(enemy, player);
   setTimeout(() => {
     enemyAttack(enemy, player);
   }, 3000);
 }
+
+function validateLife(character, name) {
+
+  if (character.health <= 0 && character.characterClass !== 'enemy') {
+  // alert(`${character.name} ha sido derrotado por ${name}, Game Over`);
+
+    generateText(`${character.name} ha sido derrotado por ${name}, Game Over`);
+    character.health = 0;
+  } else {
+    if (character.health <= 0 && character.characterClass === 'enemy') {
+      //alert(`${character.name} ha sido derrotado por ${name}, Has ganado valiente ${name}`);
+
+      generateText(`${character.name} ha sido derrotado por ${name}, Has ganado valiente ${name}`);
+      character.health = 0;
+    }
+  }
+
+}
+document.querySelector('.actions').style.display = 'none';
+document.querySelector('.log').style.display = 'none';
