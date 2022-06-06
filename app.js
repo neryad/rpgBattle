@@ -93,6 +93,33 @@ let enemies = [
       'https://thumbs.dreamstime.com/z/vector-pixel-art-wolf-head-isolated-cartoon-127963772.jpg',
   },
 ];
+var spriteSheet = document.getElementById("sprite-image");
+var animationInterval;
+var widthOfSpriteSheet = 1472;
+var widthOfEachSprite = 184;
+function stopAnimation() {
+  clearInterval(animationInterval);
+}
+function startAnimation() {
+  var position = widthOfEachSprite; //start position for the image
+  const speed = 100; //in millisecond(ms)
+  const diff = widthOfEachSprite; //difference between two sprites
+
+  animationInterval = setInterval(() => {
+    spriteSheet.style.backgroundPosition = `-${position}px 0px`;
+
+    if (position < widthOfSpriteSheet) {
+      position = position + diff;
+    } else {
+      //increment the position by the width of each sprite each time
+      position = widthOfEachSprite;
+    }
+    //reset the position to show first sprite after the last one
+  }, speed);
+}
+
+const playerImage = new Image();
+// playerImage.src = './assets/images/Idle.png';
 
 function selectHero(characterClass) {
   // console.log(`You have selected ${characterClass}`);
@@ -164,6 +191,7 @@ let turns;
 let logText = document.querySelector('#text');
 
 function startGame() {
+  startAnimation();
   // console.log('start game');
   if (hero == undefined) {
     hero = warrior;
@@ -173,6 +201,7 @@ function startGame() {
   document.querySelector('.actions').style.display = 'inline-flex';
   document.querySelector('.log').style.display = 'inline-flex';
   document.querySelector('.start').style.display = 'none';
+  document.querySelector('#reset').style.display = 'none';
   document.querySelector('.container').style.backgroundImage =
     "url('./assets/images/battleback1-2.png')";
   hideRestOfHeros(hero.characterClass);
@@ -196,6 +225,16 @@ function startGame() {
     playerSpecial(hero, enemy);
     document.querySelector('#special').disabled = true;
   });
+
+  document.querySelector('#reset').addEventListener('click', function () {
+    // console.log('attack');
+    resetGame();
+  });
+}
+function resetGame(){
+
+
+  location.reload();
 }
 function whoGoFirst(hero, enemy) {
   if (hero.speed > enemy.speed) {
@@ -283,6 +322,12 @@ function characterAttack(character, target) {
 }
 
 function heroTurn(player, target) {
+  let sprite = document.querySelector('#sprite-image');
+  // sprite.style.backgroundImage = `url('./assets/images/${player.characterClass}-attack.png')`;
+  // sprite.style.backgroundImage = `url('./assets/characters/heros/warrior/Attack1.png')`;
+  // sprite.style.animation = 'attack 1s steps(4) infinite';
+  sprite.classList.remove('idle');
+  sprite.classList.add('attackPlayer');
  let enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
   if (enemyDefendNumber >= 7) {
     enemyDefend(target, player);
@@ -308,15 +353,31 @@ function heroTurn(player, target) {
     );
   }
   target.health -= damage;
-  validateLife(target, player.name);
+  if(target.health <= 0){
+    generateText(`${target.name} ha sido derrotado por ${player.name}, Has ganado valiente ${player.name}`);
+
+    document.querySelector('#attack').disabled = true;
+    document.querySelector('#defend').disabled = true;
+    document.querySelector('#special').disabled = true;
+    document.querySelector('#reset').style.display = 'inline-flex';
+    return;
+  }
+  //validateLife(target, player.name);
   document.querySelector('#enemy-hp').innerHTML = target.health;
 
   generateText(`Player hit ${target.name} for ${damage} damage.`);
   document.querySelector('#attack').disabled = true;
   document.querySelector('#defend').disabled = true;
+  // sprite.classList.remove('attackPlayer');
+  // sprite.classList.add('idle');
+setTimeout(() => {
+  sprite.classList.remove('attackPlayer');
+  sprite.classList.add('idle');
+}, 1000);
   setTimeout(() => {
+
     enemyAttack(target, player);
-  }, 3000);
+  }, 1500);
   let rndNumber = randomNumber();
 }
 
@@ -331,7 +392,21 @@ function enemyAttack(enemy, target) {
   let damage = Math.floor(Math.random() * enemy.strength) * 1.5;
   generateText(`${enemy.name} hit ${target.characterClass} for ${damage} damage.`);
   target.health -= damage;
-  validateLife(target, enemy.name);
+  // validateLife(target, enemy.name);
+
+  if(target.health <= 0){
+
+
+      generateText(`${target.name} ha sido derrotado por ${enemy.name}, Game Over`);
+
+      target.health = 0;
+      document.querySelector('#attack').disabled = true;
+      document.querySelector('#defend').disabled = true;
+      document.querySelector('#special').disabled = true;
+      document.querySelector('#reset').style.display = 'inline-flex';
+
+      return;
+  }
   document.querySelector('#health').style.width = `${target.health}%`;
 
   document.querySelector(`#${target.characterClass}-hp`).innerHTML = target.health;
@@ -345,6 +420,15 @@ function characterDefense(character, target) {
   let damage = character.defense - target.strength;
   generateText(`${target.name} hit ${character.name} for ${damage} damage.`);
   character.health -= damage;
+  if( character.health <= 0){
+    generateText(`${character.name} ha sido derrotado por ${target.name}, Game Over`);
+
+    character.health = 0;
+    document.querySelector('#attack').disabled = true;
+    document.querySelector('#defend').disabled = true;
+    document.querySelector('#special').disabled = true;
+    document.querySelector('#reset').style.display = 'inline-flex';
+  }
   document.querySelector(`#${character.characterClass}-hp`).innerHTML =
     character.health;
   // setTimeout(() => {
@@ -366,7 +450,7 @@ function enemyDefend(enemy, player) {
   document.querySelector('#enemy-hp').innerHTML = enemy.health;
   document.querySelector('#attack').disabled = false;
   document.querySelector('#defend').disabled = false;
-  generateText(`${player.name} turn.`);
+  generateText(`${enemy.name} se defendió ahora es turno de ${player.name}.`);
   // setTimeout(() => {
   //   generateText(`${player.name} turn.`);
   // }, 1000);
@@ -395,13 +479,22 @@ function playerSpecial(player, enemy) {
   }
   enemy.health -= damage;
 
-  validateLife(enemy, player.name);
+  // validateLife(enemy, player.name);
+  if(enemy.health <= 0){
+    generateText(`${enemy.name} ha sido derrotado por ${player.name}, Has ganado valiente ${player.name}`);
+
+    document.querySelector('#attack').disabled = true;
+    document.querySelector('#defend').disabled = true;
+    document.querySelector('#special').disabled = true;
+    document.querySelector('#reset').style.display = 'inline-flex';
+    return;
+  }
   document.querySelector('#enemy-hp').innerHTML = enemy.health;
 
-  //enemyAttack(enemy, player);
-  setTimeout(() => {
-    enemyAttack(enemy, player);
-  }, 3000);
+  enemyAttack(enemy, player);
+  // setTimeout(() => {
+  //   enemyAttack(enemy, player);
+  // }, 3000);
 }
 
 function validateLife(character, name) {
@@ -410,14 +503,26 @@ function validateLife(character, name) {
   // alert(`${character.name} ha sido derrotado por ${name}, Game Over`);
 
     generateText(`${character.name} ha sido derrotado por ${name}, Game Over`);
+
     character.health = 0;
+    document.querySelector('#attack').disabled = true;
+    document.querySelector('#defend').disabled = true;
+    document.querySelector('#special').disabled = true;
+    document.querySelector('#reset').style.display = 'inline-flex';
+    return;
   } else {
     if (character.health <= 0 && character.characterClass === 'enemy') {
       //alert(`${character.name} ha sido derrotado por ${name}, Has ganado valiente ${name}`);
 
       generateText(`${character.name} ha sido derrotado por ${name}, Has ganado valiente ${name}`);
-      character.health = 0;
+
+      document.querySelector('#attack').disabled = true;
+      document.querySelector('#defend').disabled = true;
+      document.querySelector('#special').disabled = true;
+      document.querySelector('#reset').style.display = 'inline-flex';
+      return;
     }
+
   }
 
 }

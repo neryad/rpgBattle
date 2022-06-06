@@ -1,46 +1,118 @@
 *{
   margin: 0;
   padding: 0;
+  font-family: 'Macondo', cursive;
+}
+#sprite-image {
+  /* height: 325px;
+  width: 184px; */
+  height: 135px;
+  width: 135px;
+
+}
+
+.idle{
+background: url('./assets/characters/heros/warrior/Idle.png') 0px 0px;
+  animation: play 0.8s steps(1) infinite;
+}
+
+.attackPlayer{
+  background: url('./assets/characters/heros/warrior/Attack1.png') 0px 0px;
+    animation: attack 0.8s steps(1) infinite;
+}
+
+@keyframes play {
+  0% {
+    background-position: 0px;
+  }
+     10% {
+       background-position: 135px;
+     }
+      20% {
+        background-position: 270px;
+      }
+      30% {
+        background-position: 405px;
+      }
+      40% {
+        background-position: 540px;
+      }
+
+
+}
+
+@keyframes attack{
+  0%{
+    background-position: 0px;
+  }
+    25%{
+      background-position: 135px;
+    }
+    50%{
+      background-position: 270px;
+    }
+    75%{
+      background-position: 405px;
+    }
+}
+:root{
+  --raisin-black :#272324;
+    --dark-sea-green: #83B799;
+    --arylide-yellow: #E2CD6D;
+   --sage:#C2B28F;
+   --cookies-and-cream: #E4D8B4;
+   --light-carmine-pink: #E86F68;
 }
 .container{
-      height: 100vh;
-      width: 100vw;
-      background: wheat;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
+
+        height: 100vh;
+          width: 100vw;
+          background: var(--raisin-black);
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          background-size: cover;
+          background-repeat: no-repeat;
 }
 
 .characters {
-  background: #2e3131;
-  /* width: 90vw; */
+  /* background: var(--raisin-black); */
+  width: 90vw;
   /* height: 50vh; */
   display: flex;
   flex-direction: row;
-  /* padding: 0.5rem; */
+  padding: 0.25rem;
   text-align: center;
   justify-content: space-between;
+  color: white;
+}
+.character-stats, .enemy-stats{
+text-align: start;
+  font-size: .8em;
+  list-style: none;
 }
 
+.character-stats ul, .enemy-stats ul{
+      list-style: none;
+}
 .character, .enemies{
 
-  /* display: flex;
+display: flex;
   flex-direction: column;
-  background: red;
-  width: 25%;
-  height: 25%;
-  justify-content: space-between; */
-  display: flex;
-  flex-direction: column;
-  background: white;
-  width: 25%;
-  /* height: 60%; */
+  background: var(--raisin-black);
+  width: 9rem;
+  height: 8rem;
   justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem;
+  border: 1px solid var(--cookies-and-cream);
 }
 
 .character-image, .enemy-image{
-  width: 7rem;
-  height: 7rem;
+width: 5rem;
+  height: 5rem;
+
+  margin: 0 auto;
 }
 
 .character-image img, .enemy-image img{
@@ -50,3 +122,69 @@
     object-fit: cover;
 
 }
+
+.charcter-info, .enemy-info{
+      display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 80%;
+}
+.log{
+      height: 5rem;
+        /* background: red; */
+        border: solid 3.5px var(--arylide-yellow);
+        margin: 5px;
+        background: rgb(16, 44, 94);
+        /* background: linear-gradient(90deg, #102c5e 0%, #04041c 35%, rgba(0,0,0,1) 100%); */
+        background-image: linear-gradient(to bottom, #102c5e, #10234c, #0e1a3b, #0c122b, #04041c);
+        color: white;
+        border-radius: 5px;
+
+              justify-content: space-between;
+
+}
+
+#log{
+      width: 100%;
+        /* background: blue; */
+        height: 100%;
+        /* margin: auto 0; */
+        display: flex;
+        /* text-align: center; */
+        align-items: center;
+        justify-content: center;
+}
+
+#text{
+  width: 100%;
+}
+
+.bodyCotent{
+  display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 15rem;
+}
+
+.actions{
+  display: inline-flex;
+    /* background: aqua; */
+    width: 15rem;
+    align-items: center;
+    justify-content: space-evenly;
+    border-left: 1px solid white;
+}
+
+#bar{
+  width: 100%;
+  border: solid .3px var(--cookies-and-cream);
+}
+#health{
+  background-color: var(--dark-sea-green);
+  width: 100%;
+}
+

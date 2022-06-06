@@ -4,22 +4,36 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Macondo&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="main.css" />
     <title>RPGBattle</title>
   </head>
   <body>
     <div class="container">
-      <div class="characters">
+
+      <div class="bodyCotent">
+
+
+<div class="start">
+        <button onclick="startGame()" id="start">Start</button>
+      </div>
+
+<div class="characters">
         <div onclick="selectHero('warrior')" id="warrior" class="character">
           <div class="character-name">
             <span>Warrior</span>
           </div>
           <div class="charcter-info">
             <div class="character-image">
-              <img
-                src="assets/characters/heros/warrior/Preview.gif"
+              <div id="bar">
+                <div id="health">100</div>
+              </div>
+              <div class="idle" id="sprite-image">
+
                 alt="warrior"
-              />
+              </div>
             </div>
             <div class="character-stats">
               <ul>
@@ -109,20 +123,23 @@
         </div>
 
       </div>
-        <div class="actions">
-          <div class="start">
-        <button onclick="startGame()" id="start">Start</button>
+
       </div>
-      <div class="actionsButtons">
-        <button  id="attack">Attack</button>
-        <button id="defend">Defend</button>
-        <button  id="special">Special</button>
-      </div>
-        </div>
+
+
         <div class="log">
           <div id="log">
             <span id="text"></span>
           </div>
+          <div class="actions">
+
+      <div class="actionsButtons">
+        <button class="actions"  id="attack">Attack</button>
+        <button class="actions" id="defend">Defend</button>
+        <button class="actions"  id="special">Special</button>
+        <button class="actions"  id="reset">Reiniciar juego</button>
+      </div>
+        </div>
         </div>
       </div>
 
