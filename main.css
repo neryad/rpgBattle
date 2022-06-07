@@ -1,78 +1,192 @@
-*{
+* {
   margin: 0;
   padding: 0;
   font-family: 'Macondo', cursive;
 }
+
 #sprite-image {
   /* height: 325px;
   width: 184px; */
   height: 135px;
   width: 135px;
+  transform: scale(2);
+  image-rendering: pixelated;
 
 }
 
-.idle{
-background: url('./assets/characters/heros/warrior/Idle.png') 0px 0px;
+.idle {
+  background-image: url('./assets/characters/heros/warrior/Idle.png');
   animation: play 0.8s steps(1) infinite;
+
 }
 
-.attackPlayer{
-  background: url('./assets/characters/heros/warrior/Attack1.png') 0px 0px;
-    animation: attack 0.8s steps(1) infinite;
+.attackPlayer {
+  background-image: url('./assets/characters/heros/warrior/Attack1.png');
+  animation: attack 0.8s steps(1) infinite;
+}
+
+.deathPlayer {
+  background-image: url('./assets/characters/heros/warrior/Death.png');
+  animation: death 1.0s steps(1);
+  /* background-position: -1215px;
+    animation-fill-mode: backwards; */
+  animation-fill-mode: both;
+  /* animation-iteration-count: 1; */
+
+}
+.playerGetHit{
+    background-image: url('./assets/characters/heros/warrior/Get Hit.png');
+      animation: hit 1.0s steps(1);
+      animation-fill-mode: both;
 }
 
 @keyframes play {
   0% {
     background-position: 0px;
   }
-     10% {
-       background-position: 135px;
-     }
-      20% {
-        background-position: 270px;
-      }
-      30% {
-        background-position: 405px;
-      }
-      40% {
-        background-position: 540px;
-      }
+
+  10% {
+    background-position: 135px;
+  }
+
+  20% {
+    background-position: 270px;
+  }
+
+  30% {
+    background-position: 405px;
+  }
+
+  40% {
+    background-position: 540px;
+
+  }
 
 
 }
 
-@keyframes attack{
-  0%{
+@keyframes death {
+  0% {
     background-position: 0px;
   }
-    25%{
-      background-position: 135px;
-    }
-    50%{
-      background-position: 270px;
-    }
-    75%{
-      background-position: 405px;
-    }
-}
-:root{
-  --raisin-black :#272324;
-    --dark-sea-green: #83B799;
-    --arylide-yellow: #E2CD6D;
-   --sage:#C2B28F;
-   --cookies-and-cream: #E4D8B4;
-   --light-carmine-pink: #E86F68;
-}
-.container{
 
-        height: 100vh;
-          width: 100vw;
-          background: var(--raisin-black);
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          background-size: cover;
-          background-repeat: no-repeat;
+  10% {
+    background-position: -135px;
+  }
+
+  20% {
+    background-position: -270px;
+  }
+
+  30% {
+    background-position: -405px;
+  }
+
+  40% {
+    background-position: -540px;
+
+  }
+
+  50% {
+    background-position: -675px;
+  }
+
+  60% {
+    background-position: -810px;
+  }
+
+  70% {
+    background-position: -945px;
+  }
+
+  /* 80% {
+    background-position: -1080px;
+
+  } */
+
+  /* 90% {
+    background-position: -1080px;
+
+  } */
+
+  100% {
+    background-position: -1080px;
+
+  }
+
+
+
+}
+
+@keyframes attack {
+  0% {
+    background-position: 0px;
+  }
+
+  25% {
+    background-position: 135px;
+  }
+
+  50% {
+    background-position: 270px;
+  }
+
+  75% {
+    background-position: 405px;
+  }
+}
+
+@keyframes hit {
+  0% {
+    background-position: 0px;
+  }
+
+  20% {
+    background-position: 135px;
+  }
+
+  40% {
+    background-position: 270px;
+  }
+     60% {
+       background-position: 135px;
+     }
+            100% {
+              background-position: 0px;
+            }
+
+  /* 30% {
+    background-position: 405px;
+  }
+
+  40% {
+    background-position: 540px;
+
+  } */
+
+
+}
+
+
+:root {
+  --raisin-black: #272324;
+  --dark-sea-green: #83B799;
+  --arylide-yellow: #E2CD6D;
+  --sage: #C2B28F;
+  --cookies-and-cream: #E4D8B4;
+  --light-carmine-pink: #E86F68;
+}
+
+.container {
+
+  height: 100vh;
+  width: 100vw;
+  background: var(--raisin-black);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .characters {
@@ -86,18 +200,23 @@ background: url('./assets/characters/heros/warrior/Idle.png') 0px 0px;
   justify-content: space-between;
   color: white;
 }
-.character-stats, .enemy-stats{
-text-align: start;
+
+.character-stats,
+.enemy-stats {
+  text-align: start;
   font-size: .8em;
   list-style: none;
 }
 
-.character-stats ul, .enemy-stats ul{
-      list-style: none;
+.character-stats ul,
+.enemy-stats ul {
+  list-style: none;
 }
-.character, .enemies{
 
-display: flex;
+.character,
+.enemies {
+
+  display: flex;
   flex-direction: column;
   background: var(--raisin-black);
   width: 9rem;
@@ -108,83 +227,87 @@ display: flex;
   border: 1px solid var(--cookies-and-cream);
 }
 
-.character-image, .enemy-image{
-width: 5rem;
+.character-image,
+.enemy-image {
+  width: 5rem;
   height: 5rem;
 
   margin: 0 auto;
 }
 
-.character-image img, .enemy-image img{
+.character-image img,
+.enemy-image img {
 
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-
-}
-
-.charcter-info, .enemy-info{
-      display: flex;
-        flex-direction: row-reverse;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 80%;
-}
-.log{
-      height: 5rem;
-        /* background: red; */
-        border: solid 3.5px var(--arylide-yellow);
-        margin: 5px;
-        background: rgb(16, 44, 94);
-        /* background: linear-gradient(90deg, #102c5e 0%, #04041c 35%, rgba(0,0,0,1) 100%); */
-        background-image: linear-gradient(to bottom, #102c5e, #10234c, #0e1a3b, #0c122b, #04041c);
-        color: white;
-        border-radius: 5px;
-
-              justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 
 }
 
-#log{
-      width: 100%;
-        /* background: blue; */
-        height: 100%;
-        /* margin: auto 0; */
-        display: flex;
-        /* text-align: center; */
-        align-items: center;
-        justify-content: center;
+.charcter-info,
+.enemy-info {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 80%;
 }
 
-#text{
+.log {
+  height: 5rem;
+  /* background: red; */
+  border: solid 3.5px var(--arylide-yellow);
+  margin: 5px;
+  background: rgb(16, 44, 94);
+  /* background: linear-gradient(90deg, #102c5e 0%, #04041c 35%, rgba(0,0,0,1) 100%); */
+  background-image: linear-gradient(to bottom, #102c5e, #10234c, #0e1a3b, #0c122b, #04041c);
+  color: white;
+  border-radius: 5px;
+
+  justify-content: space-between;
+
+}
+
+#log {
+  width: 100%;
+  /* background: blue; */
+  height: 100%;
+  /* margin: auto 0; */
+  display: flex;
+  /* text-align: center; */
+  align-items: center;
+  justify-content: center;
+}
+
+#text {
   width: 100%;
 }
 
-.bodyCotent{
+.bodyCotent {
   display: flex;
-    flex-direction: column-reverse;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    height: 15rem;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 15rem;
 }
 
-.actions{
+.actions {
   display: inline-flex;
-    /* background: aqua; */
-    width: 15rem;
-    align-items: center;
-    justify-content: space-evenly;
-    border-left: 1px solid white;
+  /* background: aqua; */
+  width: 15rem;
+  align-items: center;
+  justify-content: space-evenly;
+  border-left: 1px solid white;
 }
 
-#bar{
+#bar {
   width: 100%;
   border: solid .3px var(--cookies-and-cream);
 }
-#health{
+
+#health {
   background-color: var(--dark-sea-green);
   width: 100%;
 }
-

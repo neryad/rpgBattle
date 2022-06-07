@@ -1,6 +1,6 @@
 let warrior = {
   name: 'Warrior',
-  health: 100,
+  health: 10,
   strength: 17,
   defense: 16,
   speed: 13,
@@ -94,31 +94,31 @@ let enemies = [
   },
 ];
 var spriteSheet = document.getElementById("sprite-image");
-var animationInterval;
-var widthOfSpriteSheet = 1472;
-var widthOfEachSprite = 184;
-function stopAnimation() {
-  clearInterval(animationInterval);
-}
-function startAnimation() {
-  var position = widthOfEachSprite; //start position for the image
-  const speed = 100; //in millisecond(ms)
-  const diff = widthOfEachSprite; //difference between two sprites
+// var animationInterval;
+// var widthOfSpriteSheet = 1472;
+// var widthOfEachSprite = 184;
+// function stopAnimation() {
+//   clearInterval(animationInterval);
+// }
+// function startAnimation() {
+//   var position = widthOfEachSprite; //start position for the image
+//   const speed = 100; //in millisecond(ms)
+//   const diff = widthOfEachSprite; //difference between two sprites
 
-  animationInterval = setInterval(() => {
-    spriteSheet.style.backgroundPosition = `-${position}px 0px`;
+//   animationInterval = setInterval(() => {
+//     spriteSheet.style.backgroundPosition = `-${position}px 0px`;
 
-    if (position < widthOfSpriteSheet) {
-      position = position + diff;
-    } else {
-      //increment the position by the width of each sprite each time
-      position = widthOfEachSprite;
-    }
-    //reset the position to show first sprite after the last one
-  }, speed);
-}
+//     if (position < widthOfSpriteSheet) {
+//       position = position + diff;
+//     } else {
+//       //increment the position by the width of each sprite each time
+//       position = widthOfEachSprite;
+//     }
+//     //reset the position to show first sprite after the last one
+//   }, speed);
+// }
 
-const playerImage = new Image();
+// const playerImage = new Image();
 // playerImage.src = './assets/images/Idle.png';
 
 function selectHero(characterClass) {
@@ -189,9 +189,9 @@ function hideRestOfHeros(characterClass) {
 let playerHits = 0;
 let turns;
 let logText = document.querySelector('#text');
-
+let sprite = document.querySelector('#sprite-image');
 function startGame() {
-  startAnimation();
+  // startAnimation();
   // console.log('start game');
   if (hero == undefined) {
     hero = warrior;
@@ -322,7 +322,7 @@ function characterAttack(character, target) {
 }
 
 function heroTurn(player, target) {
-  let sprite = document.querySelector('#sprite-image');
+
   // sprite.style.backgroundImage = `url('./assets/images/${player.characterClass}-attack.png')`;
   // sprite.style.backgroundImage = `url('./assets/characters/heros/warrior/Attack1.png')`;
   // sprite.style.animation = 'attack 1s steps(4) infinite';
@@ -330,6 +330,10 @@ function heroTurn(player, target) {
   sprite.classList.add('attackPlayer');
  let enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
   if (enemyDefendNumber >= 7) {
+    setTimeout(() => {
+      sprite.classList.remove('attackPlayer');
+      sprite.classList.add('idle');
+    }, 1000);
     enemyDefend(target, player);
     return;
   }
@@ -337,7 +341,7 @@ function heroTurn(player, target) {
 
   // console.log(playerHits, '1');
   playerHits++;
-  console.log(playerHits, 'playerHits');
+  // console.log(playerHits, 'playerHits');
   if (playerHits === 7) {
     document.querySelector('#special').disabled = false;
     // console.log('se dispara el especial');
@@ -364,19 +368,20 @@ function heroTurn(player, target) {
   }
   //validateLife(target, player.name);
   document.querySelector('#enemy-hp').innerHTML = target.health;
-
+  setTimeout(() => {
+    sprite.classList.remove('attackPlayer');
+    sprite.classList.add('idle');
+  }, 1000);
   generateText(`Player hit ${target.name} for ${damage} damage.`);
   document.querySelector('#attack').disabled = true;
   document.querySelector('#defend').disabled = true;
   // sprite.classList.remove('attackPlayer');
   // sprite.classList.add('idle');
-setTimeout(() => {
-  sprite.classList.remove('attackPlayer');
-  sprite.classList.add('idle');
-}, 1000);
+
   setTimeout(() => {
 
     enemyAttack(target, player);
+
   }, 1500);
   let rndNumber = randomNumber();
 }
@@ -388,14 +393,16 @@ function generateText(text) {
 }
 
 function enemyAttack(enemy, target) {
-
+  sprite.classList.remove('idle');
+  // sprite.classList.add('deathPlayer');
   let damage = Math.floor(Math.random() * enemy.strength) * 1.5;
   generateText(`${enemy.name} hit ${target.characterClass} for ${damage} damage.`);
   target.health -= damage;
+
   // validateLife(target, enemy.name);
 
   if(target.health <= 0){
-
+    sprite.classList.remove('playerGetHit');
 
       generateText(`${target.name} ha sido derrotado por ${enemy.name}, Game Over`);
 
@@ -404,14 +411,20 @@ function enemyAttack(enemy, target) {
       document.querySelector('#defend').disabled = true;
       document.querySelector('#special').disabled = true;
       document.querySelector('#reset').style.display = 'inline-flex';
+    sprite.classList.remove('idle');
+    setTimeout(() => {
+      sprite.classList.add('deathPlayer');
+    }, 1000);
 
       return;
   }
+  sprite.classList.remove('playerGetHit');
   document.querySelector('#health').style.width = `${target.health}%`;
 
   document.querySelector(`#${target.characterClass}-hp`).innerHTML = target.health;
   document.querySelector('#attack').disabled = false;
   document.querySelector('#defend').disabled = false;
+  sprite.classList.add('idle');
 }
 //?Por el momento se comenta
 function characterDefense(character, target) {
