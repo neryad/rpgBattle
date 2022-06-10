@@ -55,9 +55,7 @@ let enemies = [
     strength: 16,
     defense: 12,
     speed: 16,
-    intelligence: 6,
-    enemyImg:
-      'https://thumbs.dreamstime.com/z/vector-pixel-art-wolf-head-isolated-cartoon-127963772.jpg',
+    intelligence: 6
   },
   {
     name: 'Goblin',
@@ -66,9 +64,7 @@ let enemies = [
     strength: 11,
     defense: 10,
     speed: 10,
-    intelligence: 8,
-    enemyImg:
-      'https://thumbs.dreamstime.com/z/vector-pixel-art-wolf-head-isolated-cartoon-127963772.jpg',
+    intelligence: 8
   },
   {
     name: 'Gnoll',
@@ -77,9 +73,7 @@ let enemies = [
     strength: 16,
     defense: 12,
     speed: 10,
-    intelligence: 6,
-    enemyImg:
-      'https://thumbs.dreamstime.com/z/vector-pixel-art-wolf-head-isolated-cartoon-127963772.jpg',
+    intelligence: 6
   },
   {
     name: 'Half orc',
@@ -88,12 +82,10 @@ let enemies = [
     strength: 14,
     defense: 13,
     speed: 11,
-    intelligence: 8,
-    enemyImg:
-      'https://thumbs.dreamstime.com/z/vector-pixel-art-wolf-head-isolated-cartoon-127963772.jpg',
+    intelligence: 8
   },
 ];
-var spriteSheet = document.getElementById("sprite-image");
+// var spriteSheet = document.getElementById("sprite-image");
 // var animationInterval;
 // var widthOfSpriteSheet = 1472;
 // var widthOfEachSprite = 184;
@@ -190,6 +182,7 @@ let playerHits = 0;
 let turns;
 let logText = document.querySelector('#text');
 let sprite = document.querySelector('#sprite-image');
+let enemySprite = document.querySelector('#sprite-image-enemy');
 function startGame() {
   // startAnimation();
   // console.log('start game');
@@ -277,7 +270,7 @@ function setEnemyStatus(enemy) {
   document.getElementById('enemy-def').innerHTML = enemy.defense;
   document.getElementById('enemy-speed').innerHTML = enemy.speed;
   document.getElementById('enemy-name').innerHTML = enemy.name;
-  document.getElementById('enemy-image').src = enemy.enemyImg;
+ // document.getElementById('enemy-image').src = enemy.enemyImg;
 }
 setHeroStatus();
 document.querySelector('.enemies').style.display = 'none';
@@ -327,11 +320,15 @@ function heroTurn(player, target) {
   // sprite.style.backgroundImage = `url('./assets/characters/heros/warrior/Attack1.png')`;
   // sprite.style.animation = 'attack 1s steps(4) infinite';
   sprite.classList.remove('idle');
+  enemySprite.classList.remove('idleEnemy');
   sprite.classList.add('attackPlayer');
+  enemySprite.classList.add('enemyGetHit');
  let enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
   if (enemyDefendNumber >= 7) {
     setTimeout(() => {
+
       sprite.classList.remove('attackPlayer');
+
       sprite.classList.add('idle');
     }, 1000);
     enemyDefend(target, player);
@@ -364,12 +361,22 @@ function heroTurn(player, target) {
     document.querySelector('#defend').disabled = true;
     document.querySelector('#special').disabled = true;
     document.querySelector('#reset').style.display = 'inline-flex';
+   setTimeout(() => {
+     enemySprite.classList.remove('enemyGetHit');
+     sprite.classList.remove('attackPlayer');
+
+     sprite.classList.add('idle');
+     enemySprite.classList.add('deathEnemy');
+   }, 1000);
     return;
   }
   //validateLife(target, player.name);
   document.querySelector('#enemy-hp').innerHTML = target.health;
   setTimeout(() => {
+    enemySprite.classList.remove('enemyGetHit');
     sprite.classList.remove('attackPlayer');
+    enemySprite.classList.add('idleEnemy');
+
     sprite.classList.add('idle');
   }, 1000);
   generateText(`Player hit ${target.name} for ${damage} damage.`);
@@ -393,38 +400,53 @@ function generateText(text) {
 }
 
 function enemyAttack(enemy, target) {
+  enemySprite.classList.remove('idleEnemy');
   sprite.classList.remove('idle');
+
   // sprite.classList.add('deathPlayer');
   let damage = Math.floor(Math.random() * enemy.strength) * 1.5;
   generateText(`${enemy.name} hit ${target.characterClass} for ${damage} damage.`);
   target.health -= damage;
 
   // validateLife(target, enemy.name);
+  enemySprite.classList.add('attackEnemy');
+  sprite.classList.add('playerGetHit');
 
-  if(target.health <= 0){
-    sprite.classList.remove('playerGetHit');
+  // if(target.health <= 0){
+  //   enemySprite.classList.remove('attackEnemy');
+  //   enemySprite.classList.add('idleEnemy');
+  //  // sprite.classList.add('playerGetHit');
+  //   //sprite.classList.remove('idle');
+  //     generateText(`${target.name} ha sido derrotado por ${enemy.name}, Game Over`);
 
-      generateText(`${target.name} ha sido derrotado por ${enemy.name}, Game Over`);
+  //     target.health = 0;
+  //     document.querySelector('#attack').disabled = true;
+  //     document.querySelector('#defend').disabled = true;
+  //     document.querySelector('#special').disabled = true;
+  //     document.querySelector('#reset').style.display = 'inline-flex';
+  //   //sprite.classList.remove('playerGetHit');
+  //   setTimeout(() => {
+  //     sprite.classList.remove('playerGetHit');
+  //     sprite.classList.add('deathPlayer');
+  //   }, 1000);
 
-      target.health = 0;
-      document.querySelector('#attack').disabled = true;
-      document.querySelector('#defend').disabled = true;
-      document.querySelector('#special').disabled = true;
-      document.querySelector('#reset').style.display = 'inline-flex';
-    sprite.classList.remove('idle');
-    setTimeout(() => {
-      sprite.classList.add('deathPlayer');
-    }, 1000);
+  //     return;
+  // }
 
-      return;
-  }
-  sprite.classList.remove('playerGetHit');
+  // sprite.classList.remove('playerGetHit');
   document.querySelector('#health').style.width = `${target.health}%`;
 
   document.querySelector(`#${target.characterClass}-hp`).innerHTML = target.health;
   document.querySelector('#attack').disabled = false;
   document.querySelector('#defend').disabled = false;
-  sprite.classList.add('idle');
+
+  setTimeout(() => {
+    enemySprite.classList.remove('attackEnemy');
+    sprite.classList.remove('playerGetHit');
+    // sprite.classList.remove('playerGetHit');
+    sprite.classList.add('idle');
+    enemySprite.classList.add('idleEnemy');
+  }, 1000);
 }
 //?Por el momento se comenta
 function characterDefense(character, target) {
