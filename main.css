@@ -1,7 +1,122 @@
 * {
-  margin: 0;
+  /* background-color: #212B31;
+    color: #F1E1C4;
+    font-family: 'Macondo', cursive; */
+  /* margin: 0;
   padding: 0;
   font-family: 'Macondo', cursive;
+  height: 100vh;
+  width: 100vw;
+  background-color: #212B31;
+  color: #F1E1C4;
+  overflow: hidden; */
+}
+html, body{
+    background-color: #212B31;
+      color: #F1E1C4;
+      font-family: 'Macondo', cursive;
+}
+/****tes***/
+
+.heroes{
+      width: 90vw;
+    display: flex;
+      justify-content: space-around;
+        border-radius: 5px;
+}
+.hero{
+      height: 15rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 15rem;
+        align-items: center;
+        border: 3px solid;
+          color: #F1E1C4;
+              padding: 0.5rem;
+}
+
+.hero-image{
+  border-radius: 50%;
+    border: 2px solid;
+    color: #F1E1C4;
+    height: 6rem;
+    width: 6rem;
+    margin-top: -4rem;
+}
+
+.hero-image img {
+      height: 65px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 60%;
+        margin-top: 1rem;
+      }
+.hero-name span{
+  font-size: 2em;
+}
+
+.hero-info{
+      width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        line-height: 2;
+
+        font-size: 1.5em;
+}
+
+.hero-info ul{
+  list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.start {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 90%;
+  height: 90%;
+  border: 1px solid;
+  align-items: center;
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  /* margin: 0 auto; */
+  width: 100%;
+  /* margin: auto; */
+  height: 100%;
+  /* background: red; */
+  /* margin: 1rem 1rem; */
+  margin-top: 2rem;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  width: 40%;
+  border-radius: 5px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+img {
+  border-radius: 5px 5px 0 0;
+}
+
+.container {
+  padding: 2px 16px;
+}
+
+.gametittle{
+  text-align: center;
+    margin: 3rem;
+
 }
 
 #sprite-image  {
@@ -388,27 +503,35 @@
 
 }
 
-:root {
+/* :root {
   --raisin-black: #272324;
   --dark-sea-green: #83B799;
   --arylide-yellow: #E2CD6D;
   --sage: #C2B28F;
   --cookies-and-cream: #E4D8B4;
   --light-carmine-pink: #E86F68;
-}
+} */
 
 .container {
 
-  height: 100vh;
-  width: 100vw;
-  background: var(--raisin-black);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-size: cover;
-  background-repeat: no-repeat;
+  height: 60vh;
 }
+.container-battle {
+  height: 95vh;
+    width: 95vw;
+    background-image: url(./assets/images/battleback1-2.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 4px solid;
+    margin-top: 1rem;
 
+  /* height: 66vh;
+    margin-top: 10rem;
+    border: 2px solid currentColor; */
+}
 .characters {
   /* background: var(--raisin-black); */
   width: 90vw;
@@ -477,25 +600,20 @@
 .log {
   height: 5rem;
   /* background: red; */
-  border: solid 3.5px var(--arylide-yellow);
+  border: solid 3.5px #F1E1C4;;
   margin: 5px;
   background: rgb(16, 44, 94);
-  /* background: linear-gradient(90deg, #102c5e 0%, #04041c 35%, rgba(0,0,0,1) 100%); */
   background-image: linear-gradient(to bottom, #102c5e, #10234c, #0e1a3b, #0c122b, #04041c);
-  color: white;
+  color: #F1E1C4;
   border-radius: 5px;
-
   justify-content: space-between;
 
 }
 
 #log {
   width: 100%;
-  /* background: blue; */
   height: 100%;
-  /* margin: auto 0; */
   display: flex;
-  /* text-align: center; */
   align-items: center;
   justify-content: center;
 }
@@ -506,7 +624,7 @@
 
 .bodyCotent {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -531,3 +649,5 @@
   background-color: var(--dark-sea-green);
   width: 100%;
 }
+
+

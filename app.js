@@ -1,6 +1,7 @@
+import {action} from './helper.js';
 let warrior = {
   name: 'Warrior',
-  health: 10,
+  health: 100,
   strength: 17,
   defense: 16,
   speed: 13,
@@ -23,17 +24,17 @@ let mage = {
 };
 let hero;
 
-let assassins = {
-  name: 'Assassins',
-  health: 100,
-  strength: 15,
-  defense: 15,
-  speed: 17,
-  intelligence: 16,
-  characterClass: 'assassins',
-  criticalChance: 19,
-  specialAttack: 'Blade of death',
-};
+// let assassins = {
+//   name: 'Assassins',
+//   health: 100,
+//   strength: 15,
+//   defense: 15,
+//   speed: 17,
+//   intelligence: 16,
+//   characterClass: 'assassins',
+//   criticalChance: 19,
+//   specialAttack: 'Blade of death',
+// };
 
 let hunter = {
   name: 'Hunter',
@@ -51,8 +52,8 @@ let enemies = [
   {
     name: 'Orc',
     characterClass: 'enemy',
-    health: 100,
-    strength: 16,
+    health: 50,
+    strength: 20,
     defense: 12,
     speed: 16,
     intelligence: 6
@@ -60,8 +61,8 @@ let enemies = [
   {
     name: 'Goblin',
     characterClass: 'enemy',
-    health: 100,
-    strength: 11,
+    health: 50,
+    strength: 20,
     defense: 10,
     speed: 10,
     intelligence: 8
@@ -69,8 +70,8 @@ let enemies = [
   {
     name: 'Gnoll',
     characterClass: 'enemy',
-    health: 100,
-    strength: 16,
+    health: 50,
+    strength: 20,
     defense: 12,
     speed: 10,
     intelligence: 6
@@ -78,40 +79,13 @@ let enemies = [
   {
     name: 'Half orc',
     characterClass: 'enemy',
-    health: 100,
-    strength: 14,
+    health: 50,
+    strength: 20,
     defense: 13,
     speed: 11,
     intelligence: 8
   },
 ];
-// var spriteSheet = document.getElementById("sprite-image");
-// var animationInterval;
-// var widthOfSpriteSheet = 1472;
-// var widthOfEachSprite = 184;
-// function stopAnimation() {
-//   clearInterval(animationInterval);
-// }
-// function startAnimation() {
-//   var position = widthOfEachSprite; //start position for the image
-//   const speed = 100; //in millisecond(ms)
-//   const diff = widthOfEachSprite; //difference between two sprites
-
-//   animationInterval = setInterval(() => {
-//     spriteSheet.style.backgroundPosition = `-${position}px 0px`;
-
-//     if (position < widthOfSpriteSheet) {
-//       position = position + diff;
-//     } else {
-//       //increment the position by the width of each sprite each time
-//       position = widthOfEachSprite;
-//     }
-//     //reset the position to show first sprite after the last one
-//   }, speed);
-// }
-
-// const playerImage = new Image();
-// playerImage.src = './assets/images/Idle.png';
 
 function selectHero(characterClass) {
   // console.log(`You have selected ${characterClass}`);
@@ -119,7 +93,7 @@ function selectHero(characterClass) {
   switch (characterClass) {
     case 'warrior':
       hero = warrior;
-      // console.log(hero, 'warrior');
+
 
       break;
 
@@ -128,10 +102,6 @@ function selectHero(characterClass) {
       // console.log(hero, 'hide mage');
       break;
 
-    case 'assassins':
-      hero = assassins;
-      // console.log(hero, 'assassins');
-      break;
 
     case 'hunter':
       hero = hunter;
@@ -143,46 +113,56 @@ function selectHero(characterClass) {
       // console.log(hero, 'default warrior');
       break;
   }
+
+  startGame();
 }
 
-function hideRestOfHeros(characterClass) {
-  switch (characterClass) {
-    case 'warrior':
-      document.getElementById('mage').style.display = 'none';
-      // document.getElementById('assassins').style.display = 'none';
-      // document.getElementById('hunter').style.display = 'none';
-      // console.log('hererere');
-      break;
-    case 'mage':
-      document.getElementById('warrior').style.display = 'none';
-      // document.getElementById('assassins').style.display = 'none';
-      // document.getElementById('hunter').style.display = 'none';
-      break;
-    // case 'assassins':
-    //   document.getElementById('warrior').style.display = 'none';
-    //   document.getElementById('mage').style.display = 'none';
-    //   document.getElementById('hunter').style.display = 'none';
-    //   break;
-    // case 'hunter':
-    //   document.getElementById('warrior').style.display = 'none';
-    //   document.getElementById('mage').style.display = 'none';
-    //   document.getElementById('assassins').style.display = 'none';
+function hideRestOfHeros() {
 
-    //   break;
+  document.getElementById('heroes').style.display = 'none';
+  document.querySelector('.gametittle').style.display = 'none';
+  // switch (characterClass) {
+  //   case 'warrior':
+  //     document.getElementById('mage').style.display = 'none';
+  //     // document.getElementById('assassins').style.display = 'none';
+  //     // document.getElementById('hunter').style.display = 'none';
+  //     // console.log('hererere');
+  //     break;
+  //   case 'mage':
+  //     document.getElementById('warrior').style.display = 'none';
+  //     // document.getElementById('assassins').style.display = 'none';
+  //     // document.getElementById('hunter').style.display = 'none';
+  //     break;
+  //   // case 'assassins':
+  //   //   document.getElementById('warrior').style.display = 'none';
+  //   //   document.getElementById('mage').style.display = 'none';
+  //   //   document.getElementById('hunter').style.display = 'none';
+  //   //   break;
+  //   // case 'hunter':
+  //   //   document.getElementById('warrior').style.display = 'none';
+  //   //   document.getElementById('mage').style.display = 'none';
+  //   //   document.getElementById('assassins').style.display = 'none';
 
-    default:
-      document.getElementById('warrior').style.display = 'inline-block';
-      document.getElementById('mage').style.display = 'inline-block';
-      // document.getElementById('assassins').style.display = 'inline-block';
-      // document.getElementById('hunter').style.display = 'inline-block';
-      break;
-  }
+  //   //   break;
+
+  //   default:
+  //     document.getElementById('warrior').style.display = 'inline-block';
+  //     document.getElementById('mage').style.display = 'inline-block';
+  //     // document.getElementById('assassins').style.display = 'inline-block';
+  //     // document.getElementById('hunter').style.display = 'inline-block';
+  //     break;
+  // }
 }
 let playerHits = 0;
 let turns;
 let logText = document.querySelector('#text');
 let sprite = document.querySelector('#sprite-image');
 let enemySprite = document.querySelector('#sprite-image-enemy');
+let warriorDiv = document.getElementById('warrior');
+// let startBtn = document.querySelector('#start');
+let warriorBtn = document.querySelector('#warrior-btn');
+let hunterBtn = document.querySelector('#hunter-btn');
+let mageBtn = document.querySelector('#mage-btn');
 function startGame() {
   // startAnimation();
   // console.log('start game');
@@ -193,11 +173,14 @@ function startGame() {
 
   document.querySelector('.actions').style.display = 'inline-flex';
   document.querySelector('.log').style.display = 'inline-flex';
-  document.querySelector('.start').style.display = 'none';
+  document.querySelector('.characters').style.display = 'inline-flex';
+  // document.querySelector('.start').style.display = 'none';
   document.querySelector('#reset').style.display = 'none';
-  document.querySelector('.container').style.backgroundImage =
-    "url('./assets/images/battleback1-2.png')";
-  hideRestOfHeros(hero.characterClass);
+  // document.querySelector('.container').style.backgroundImage =
+  //   "url('./assets/images/battleback1-2.png')";
+
+  document.querySelector('.container').classList.add('container-battle');
+  hideRestOfHeros();
   let enemy = randomEnemy();
   document.querySelector('.enemies').style.display = 'inline-flex';
   document.querySelector('#special').disabled = true;
@@ -275,73 +258,31 @@ function setEnemyStatus(enemy) {
 setHeroStatus();
 document.querySelector('.enemies').style.display = 'none';
 
-function characterAttack(character, target) {
-  let damage = Math.floor(Math.random() * character.strength) * 1.5;
-  //?comentado por el momento
-  // let enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
-  // if (enemyDefendNumber >= 7) {
-  //   console.log(character, 'sds');
-  //   characterDefense(target, character);
-  // }
+async function heroTurn(player, target) {
 
-  // playerHits++;
-  // if (playerHits == 7) {
-  //   document.querySelector('#special').disabled = false;
-  //   console.log('se dispara el especial');
-  //   playerHits = 0;
-  // }
+  action('player', 'attackPlayer');
 
-  // if (damage == character.criticalChance) {
-  //   console.info('critical hit');
-  //   damage = Math.floor(Math.random() * character.strength) * 3;
-  //   generateText(
-  //     `${character.name} critically hit ${target.name} for ${damage} damage`
-  //   );
-  // }
-  target.health -= damage;
-
-  document.querySelector(`#${target.characterClass}-hp`).innerHTML =
-    target.health;
-
-  generateText(`${character.name} hit ${target.name} for ${damage} damage.`);
-
-  // characterTurns(target, character);
-  characterTurns(target, character);
-  // setTimeout(() => {
-  //   // enemyAttack(target, character);
-  //   characterTurns(target, character);
-  // }, 3000);
-  let rndNumber = randomNumber();
-}
-
-function heroTurn(player, target) {
-
-  // sprite.style.backgroundImage = `url('./assets/images/${player.characterClass}-attack.png')`;
-  // sprite.style.backgroundImage = `url('./assets/characters/heros/warrior/Attack1.png')`;
-  // sprite.style.animation = 'attack 1s steps(4) infinite';
-  sprite.classList.remove('idle');
-  enemySprite.classList.remove('idleEnemy');
-  sprite.classList.add('attackPlayer');
-  enemySprite.classList.add('enemyGetHit');
  let enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
+
   if (enemyDefendNumber >= 7) {
-    setTimeout(() => {
+    //action('player', 'attackPlayer');
+    // action('player', 'idle');
 
-      sprite.classList.remove('attackPlayer');
+     await sleep(1000);
 
-      sprite.classList.add('idle');
-    }, 1000);
-    enemyDefend(target, player);
+    action('enemy', 'enemyGetHit');
+    action('enemy', 'idleEnemy');
+    await enemyDefend(target, player);
     return;
   }
   let damage = Math.floor(Math.random() * player.strength) * 1.5;
 
-  // console.log(playerHits, '1');
+
+  action('enemy', 'enemyGetHit');
   playerHits++;
-  // console.log(playerHits, 'playerHits');
+
   if (playerHits === 7) {
     document.querySelector('#special').disabled = false;
-    // console.log('se dispara el especial');
     playerHits = 0;
   }
 
@@ -350,48 +291,62 @@ function heroTurn(player, target) {
     // console.info('critical hit');
     damage = Math.floor(Math.random() * player.strength) * 3;
     generateText(
-      `${player.name} critically hit ${target.name} for ${damage} damage`
+      `${player.name} hizo un golpe critico a ${target.name} por  ${damage} de daño`
     );
   }
   target.health -= damage;
   if(target.health <= 0){
     generateText(`${target.name} ha sido derrotado por ${player.name}, Has ganado valiente ${player.name}`);
-
+      target.health = 0;
+    document.querySelector('#enemy-hp').innerHTML = target.health;
+    console.log(target.health,'we');
     document.querySelector('#attack').disabled = true;
     document.querySelector('#defend').disabled = true;
     document.querySelector('#special').disabled = true;
     document.querySelector('#reset').style.display = 'inline-flex';
-   setTimeout(() => {
-     enemySprite.classList.remove('enemyGetHit');
-     sprite.classList.remove('attackPlayer');
 
-     sprite.classList.add('idle');
-     enemySprite.classList.add('deathEnemy');
-   }, 1000);
+
+    // action('enemy', 'deathEnemy');
+    await sleep(1000);
+    sprite.classList.add('idle');
+    enemySprite.classList.add('deathEnemy');
+    // action('player', 'idle');
+    // action('enemy', 'deathEnemy');
+  //  setTimeout(() => {
+  //    enemySprite.classList.remove('enemyGetHit');
+  //    sprite.classList.remove('attackPlayer');
+
+  //    sprite.classList.add('idle');
+  //    enemySprite.classList.add('deathEnemy');
+  //  }, 1000);
     return;
   }
-  //validateLife(target, player.name);
-  document.querySelector('#enemy-hp').innerHTML = target.health;
-  setTimeout(() => {
-    enemySprite.classList.remove('enemyGetHit');
-    sprite.classList.remove('attackPlayer');
-    enemySprite.classList.add('idleEnemy');
 
-    sprite.classList.add('idle');
-  }, 1000);
+  document.querySelector('#enemy-hp').innerHTML = target.health;
+
+  await sleep(1000);
+  action('enemy', 'idleEnemy');
+  action('player', 'idle');
+
   generateText(`Player hit ${target.name} for ${damage} damage.`);
   document.querySelector('#attack').disabled = true;
   document.querySelector('#defend').disabled = true;
-  // sprite.classList.remove('attackPlayer');
-  // sprite.classList.add('idle');
 
-  setTimeout(() => {
+ await sleep(1000);
+  enemyAttack(target, player);
 
-    enemyAttack(target, player);
-
-  }, 1500);
-  let rndNumber = randomNumber();
 }
+
+warriorDiv.addEventListener('click', function () {
+
+  console.log('warrior');
+  selectHero('warrior');
+});
+
+warriorBtn.addEventListener('click', function (event) {
+
+  selectHero('warrior');
+});
 
 function generateText(text) {
   logText.innerHTML = '';
@@ -399,96 +354,113 @@ function generateText(text) {
   return (logText.innerHTML += text);
 }
 
-function enemyAttack(enemy, target) {
-  enemySprite.classList.remove('idleEnemy');
-  sprite.classList.remove('idle');
+async function enemyAttack(enemy, target) {
+  // enemySprite.classList.remove('idleEnemy');
+  // sprite.classList.remove('idle');
+  action('enemy', 'idleEnemy');
+  action('player', 'idle');
 
-  // sprite.classList.add('deathPlayer');
   let damage = Math.floor(Math.random() * enemy.strength) * 1.5;
   generateText(`${enemy.name} hit ${target.characterClass} for ${damage} damage.`);
   target.health -= damage;
 
-  // validateLife(target, enemy.name);
-  enemySprite.classList.add('attackEnemy');
-  sprite.classList.add('playerGetHit');
 
-  // if(target.health <= 0){
-  //   enemySprite.classList.remove('attackEnemy');
-  //   enemySprite.classList.add('idleEnemy');
-  //  // sprite.classList.add('playerGetHit');
-  //   //sprite.classList.remove('idle');
-  //     generateText(`${target.name} ha sido derrotado por ${enemy.name}, Game Over`);
+  // enemySprite.classList.add('attackEnemy');
+  // sprite.classList.add('playerGetHit');
+  action('enemy', 'attackEnemy');
+  action('player', 'playerGetHit');
 
-  //     target.health = 0;
-  //     document.querySelector('#attack').disabled = true;
-  //     document.querySelector('#defend').disabled = true;
-  //     document.querySelector('#special').disabled = true;
-  //     document.querySelector('#reset').style.display = 'inline-flex';
-  //   //sprite.classList.remove('playerGetHit');
-  //   setTimeout(() => {
-  //     sprite.classList.remove('playerGetHit');
-  //     sprite.classList.add('deathPlayer');
-  //   }, 1000);
+  if(target.health <= 0){
+    target.health = 0;
 
-  //     return;
-  // }
+    enemySprite.classList.remove('attackEnemy');
 
-  // sprite.classList.remove('playerGetHit');
+      generateText(`${target.name} ha sido derrotado por ${enemy.name}, Game Over`);
+
+        target.health = 0;
+
+   // document.querySelector('#health').style.width = `${target.health}%`;
+    document.querySelector(`#${target.characterClass}-hp`).innerHTML = target.health;
+      document.querySelector('#attack').disabled = true;
+      document.querySelector('#defend').disabled = true;
+      document.querySelector('#special').disabled = true;
+      document.querySelector('#reset').style.display = 'inline-flex';
+    await sleep(1000);
+    sprite.classList.remove('playerGetHit');
+    enemySprite.classList.add('idleEnemy');
+    sprite.classList.add('deathPlayer');
+
+      return;
+  }
+
+
   document.querySelector('#health').style.width = `${target.health}%`;
-
   document.querySelector(`#${target.characterClass}-hp`).innerHTML = target.health;
+
+  await sleep(1000);
+
+  sprite.classList.add('idle');
+  enemySprite.classList.add('idleEnemy');
   document.querySelector('#attack').disabled = false;
   document.querySelector('#defend').disabled = false;
-
-  setTimeout(() => {
-    enemySprite.classList.remove('attackEnemy');
-    sprite.classList.remove('playerGetHit');
-    // sprite.classList.remove('playerGetHit');
-    sprite.classList.add('idle');
-    enemySprite.classList.add('idleEnemy');
-  }, 1000);
 }
 //?Por el momento se comenta
-function characterDefense(character, target) {
-  // console.log(character.characterClass, 'character.characterClass');
-  generateText(`${character.name} is defending.`);
-  let damage = character.defense - target.strength;
-  generateText(`${target.name} hit ${character.name} for ${damage} damage.`);
+async function characterDefense(character, target) {
+  action('player', 'idle');
+  action('enemy', 'idleEnemy');
+  action('enemy', 'attackEnemy');
+  action('player', 'playerGetHit');
+
+  await sleep(1000);
+  generateText(`${character.name} Se esta defendiendo.`);
+  let damage = target.strength -  character.defense ;
+  generateText(`${target.name} golpeo ${character.name} con ${damage} daño.`);
   character.health -= damage;
   if( character.health <= 0){
     generateText(`${character.name} ha sido derrotado por ${target.name}, Game Over`);
 
     character.health = 0;
+    sprite.classList.add('deathPlayer');
     document.querySelector('#attack').disabled = true;
     document.querySelector('#defend').disabled = true;
     document.querySelector('#special').disabled = true;
     document.querySelector('#reset').style.display = 'inline-flex';
   }
+
+  enemySprite.classList.add('idleEnemy');
+  sprite.classList.add('idle');
+
+
+
   document.querySelector(`#${character.characterClass}-hp`).innerHTML =
     character.health;
-  // setTimeout(() => {
-  //   generateText(`${target.name} hit ${character.name} for ${damage} damage.`);
-  //   character.health -= damage;
-  //   document.querySelector(`#${character.characterClass}-hp`).innerHTML =
-  //     character.health;
-  // }, 4000);
+
 }
 
 
-function enemyDefend(enemy, player) {
-   generateText(`${enemy.name} is defending.`);
-  // let damage = enemy.defense - player.strength;
-  let damage = player.defense - enemy.strength;
-  generateText(`${enemy.name}  is defending, get ${damage} damage.`);
+async function enemyDefend(enemy, player) {
+
+  sprite.classList.remove('idle');
+  enemySprite.classList.remove('idleEnemy');
+  sprite.classList.add('attackPlayer');
+  enemySprite.classList.add('enemyGetHit');
+
+   generateText(`${enemy.name} se esta defendiendo.`);
+
+  let damage = enemy.strength - player.defense ;
+  generateText(`${enemy.name}  se defendió, tomo ${damage} de daño,turno de ${player.name}.`);
   enemies.health -= damage;
+  await sleep(1000);
+  sprite.classList.remove('attackPlayer');
+  enemySprite.classList.remove('enemyGetHit');
+  sprite.classList.add('idle');
+  enemySprite.classList.add('idleEnemy');
+
   validateLife(enemy, player.name);
   document.querySelector('#enemy-hp').innerHTML = enemy.health;
   document.querySelector('#attack').disabled = false;
   document.querySelector('#defend').disabled = false;
-  generateText(`${enemy.name} se defendió ahora es turno de ${player.name}.`);
-  // setTimeout(() => {
-  //   generateText(`${player.name} turn.`);
-  // }, 1000);
+
 }
 
 function randomEnemy() {
@@ -535,7 +507,7 @@ function playerSpecial(player, enemy) {
 function validateLife(character, name) {
 
   if (character.health <= 0 && character.characterClass !== 'enemy') {
-  // alert(`${character.name} ha sido derrotado por ${name}, Game Over`);
+
 
     generateText(`${character.name} ha sido derrotado por ${name}, Game Over`);
 
@@ -547,10 +519,11 @@ function validateLife(character, name) {
     return;
   } else {
     if (character.health <= 0 && character.characterClass === 'enemy') {
-      //alert(`${character.name} ha sido derrotado por ${name}, Has ganado valiente ${name}`);
+
 
       generateText(`${character.name} ha sido derrotado por ${name}, Has ganado valiente ${name}`);
-
+      character.health == 0;
+      console.log(character.health,'erp');
       document.querySelector('#attack').disabled = true;
       document.querySelector('#defend').disabled = true;
       document.querySelector('#special').disabled = true;
@@ -561,5 +534,25 @@ function validateLife(character, name) {
   }
 
 }
+function sleep(time) {
+  return new Promise((s) => setTimeout(s, time))
+}
+
 document.querySelector('.actions').style.display = 'none';
 document.querySelector('.log').style.display = 'none';
+document.querySelector('.characters').style.display = 'none';
+
+
+// Helper
+// function action(character, type) {
+//   const entity = (character === 'player') ? sprite : spriteEnemy
+
+//   entity.classList.add(type)
+//   setTimeout(() => { entity.classList.remove(type) }, 1000)
+// }
+
+// action('enemy', 'attackEnemy')
+// action('player', 'playerGetHit')
+// await sleep(1000)
+// action('enemy', 'idle')
+// action('player', 'idle')
