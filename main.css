@@ -132,10 +132,10 @@ img {
 #sprite-image-enemy{
     height: 90px;
       width:90px;
-      transform: scale(2);
+      /* transform: scale(2); */
       image-rendering: pixelated;
       filter: FlipH;
-      transform: scaleX(-1);
+      transform: scaleX(-1.5);
 }
 
 .idle {
@@ -164,11 +164,10 @@ img {
       animation-fill-mode: both;
 }
 
-.idleEnemy {
-  background-image: url('./assets/characters/enemies/Worm/Idle.png');
-  animation: playEnemy 1s steps(1) infinite;
 
-}
+
+
+
 
 .attackEnemy {
   background-image: url('./assets/characters/enemies/Worm/Attack.png');
@@ -190,7 +189,11 @@ img {
   animation: enemyHit 1.0s steps(1);
   animation-fill-mode: both;
 }
+.idleEnemy {
+  background-image: url('./assets/characters/enemies/Worm/Idle.png');
+  animation: playEnemy 1s steps(1) infinite;
 
+}
 @keyframes play {
   0% {
     background-position: 0px;
@@ -216,6 +219,9 @@ img {
 
 
 }
+
+
+
 
 @keyframes death {
   0% {

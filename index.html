@@ -8,6 +8,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Macondo&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="./css/heros/hunter.css">
+     <link rel="stylesheet" href="./css/heros/warrior.css">
+      <link rel="stylesheet" href="./css/heros/mage.css">
     <title>D&C</title>
   </head>
   <body>
@@ -98,20 +101,22 @@
           </div>
         </div>
       </div>
+
           <div class="characters">
-        <div  id="warrior" class="character">
-          <div class="character-name">
-            <span>Warrior</span>
+         <div class="character">
+          <div class="character-hp">
+            <span>HP</span>
+            <progress id="progresHealth"  max="100"></progress>
           </div>
           <div class="charcter-info">
             <div class="character-image">
 
-              <div class="idle" id="sprite-image">
+              <div class="" id="sprite-image">
 
 
               </div>
             </div>
-            <div class="character-stats">
+            <!-- <div class="character-stats">
               <ul>
                 <li>
                   <span>HP:</span>
@@ -130,12 +135,12 @@
                   <span id="warrior-speed">100</span>
                 </li>
               </ul>
-            </div>
+            </div> -->
           </div>
         </div>
 
 
-        <div onclick="selectHero('mage')" id="mage" class="character">
+        <!-- <div onclick="selectHero('mage')" id="mage" class="character">
           <div class="character-name">
             <span>Mage</span>
           </div>
@@ -164,17 +169,21 @@
               </ul>
             </div>
           </div>
-        </div>
+        </div> -->
          <div class="enemies">
          <div class="enemy-name">
             <span id="enemy-name"></span>
+          </div>
+            <div class="character-hp">
+            <span>HP</span>
+            <progress id="enemy-hp"  max="100"></progress>
           </div>
           <div class="enemy-info">
             <div class="enemy-image">
               <div class="idleEnemy" id="sprite-image-enemy"></div>
 
             </div>
-            <div class="enemy-stats">
+            <!-- <div class="enemy-stats">
               <ul>
                 <li>
                   <span>HP:</span>
@@ -193,7 +202,7 @@
                   <span id="enemy-speed">100</span>
                 </li>
               </ul>
-            </div>
+            </div> -->
           </div>
         </div>
 

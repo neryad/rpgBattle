@@ -1,0 +1,128 @@
+/* ../../assets/characters/heros/hunter/ */
+
+.idleMage {
+  background-image: url('../../assets/characters/heros/mage/Idle.png');
+  animation: playMage 0.8s steps(1) infinite;
+}
+
+.attackMage {
+  background-image: url('../../assets/characters/heros/mage/Attack1.png');
+  animation: attackMage 0.8s steps(1) infinite;
+}
+
+.deathMage {
+  background-image: url('../../assets/characters/heros/mage/Death.png');
+  animation: deathMage .5s steps(1);
+  /* background-position: -1215px;
+    animation-fill-mode: backwards; */
+  animation-fill-mode: both;
+  /* animation-iteration-count: 1; */
+}
+
+.mageGetHit {
+  background-image: url('../../assets/characters/heros/mage/Hit.png');
+  animation: getHitMage .5s steps(1);
+  animation-fill-mode: both;
+}
+
+@keyframes playMage {
+  0% {
+    background-position: 0px;
+  }
+
+  10% {
+    background-position: 231px;
+  }
+
+  30% {
+    background-position: 462px;
+  }
+
+  40% {
+    background-position: 693px;
+  }
+
+  60% {
+    background-position: 924px;
+  }
+
+  70% {
+    background-position: 1155px;
+  }
+
+  100% {
+    background-position: 1386px;
+  }
+}
+
+@keyframes attackMage {
+  0% {
+    background-position: 0px;
+  }
+
+  20% {
+    background-position: 231px;
+  }
+
+  60% {
+    background-position: 462px;
+  }
+
+  100% {
+    background-position: 693px;
+  }
+}
+
+@keyframes getHitMage {
+  0% {
+    background-position: 0px;
+  }
+
+  20% {
+    background-position: 231px;
+  }
+
+  60% {
+    background-position: 462px;
+  }
+
+  80% {
+    background-position: 693px;
+  }
+  100% {
+    background-position: 924px;
+  }
+
+
+}
+
+
+@keyframes deathMage {
+  0% {
+    background-position: 0px;
+  }
+
+  10% {
+    background-position: -231px;
+  }
+
+  30% {
+    background-position: -462px;
+  }
+
+  50% {
+    background-position:-693px;
+  }
+
+  70% {
+    background-position: -924px;
+  }
+
+  90% {
+    background-position: -1155px;
+  }
+
+  100% {
+    background-position: -1386px;
+  }
+}
