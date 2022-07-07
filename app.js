@@ -39,7 +39,7 @@ let hunter = {
 
 let enemies = [
   {
-    name: 'Orc',
+    name: 'Worn',
     characterClass: 'enemy',
     health: 50,
     strength: 20,
@@ -48,7 +48,7 @@ let enemies = [
     intelligence: 6
   },
   {
-    name: 'Goblin',
+    name: 'Flying eye',
     characterClass: 'enemy',
     health: 50,
     strength: 20,
@@ -57,7 +57,7 @@ let enemies = [
     intelligence: 8
   },
   {
-    name: 'Gnoll',
+    name: 'Goblin',
     characterClass: 'enemy',
     health: 50,
     strength: 20,
@@ -66,7 +66,16 @@ let enemies = [
     intelligence: 6
   },
   {
-    name: 'Half orc',
+    name: 'Mushroom',
+    characterClass: 'enemy',
+    health: 50,
+    strength: 20,
+    defense: 13,
+    speed: 11,
+    intelligence: 8
+  },
+  {
+    name: 'Skeleton',
     characterClass: 'enemy',
     health: 50,
     strength: 20,
@@ -264,6 +273,37 @@ function setEnemyStatus(enemy) {
   // document.getElementById('enemy-speed').innerHTML = enemy.speed;
   // document.getElementById('enemy-name').innerHTML = enemy.name;
  // document.getElementById('enemy-image').src = enemy.enemyImg;
+
+  if (enemy.name === 'Flying eye') {
+    enemySprite.classList.add('idleFlyingEye');
+    enemySprite.style.transform = 'scale(-2.5, 2.5)';
+    enemySprite.style.height = '90px';
+    enemySprite.style.width = '100px';
+
+
+  } else if (enemy.name === 'Goblin') {
+    enemySprite.classList.add('idleGoblin');
+    enemySprite.style.transform = 'scale(-2.5, 2.5)';
+    enemySprite.style.height = '90px';
+    enemySprite.style.width = '100px';
+  } else if (enemy.name === 'Mushroom') {
+    enemySprite.classList.add('idleMushroom');
+    enemySprite.style.transform = 'scale(-2.5, 2.5)';
+    enemySprite.style.height = '90px';
+    enemySprite.style.width = '100px';
+  }
+  else if (enemy.name === 'Skeleton') {
+    enemySprite.classList.add('idleSkeleton');
+    enemySprite.style.transform = 'scale(-2.5, 2.5)';
+    enemySprite.style.height = '90px';
+    enemySprite.style.width = '100px';
+  }
+
+  else {
+    enemySprite.classList.add('idleEnemy');
+   // enemySprite.style.transform = 'scale(4)';
+  }
+
 }
 // setHeroStatus(hero);
 document.querySelector('.enemies').style.display = 'none';
@@ -275,8 +315,8 @@ async function heroTurn(player, target) {
  let enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
 
   if (enemyDefendNumber >= 7) {
-    //action('player', 'attackPlayer');
-    // action('player', 'idle');
+    action('player', 'attackPlayer');
+    action('player', 'idle');
 
      await sleep(1000);
 
@@ -541,8 +581,10 @@ async function enemyDefend(enemy, player) {
 }
 
 function randomEnemy() {
-  let enemy = enemies[Math.floor(Math.random() * enemies.length)];
+   let enemy = enemies[Math.floor(Math.random() * enemies.length)];
   // console.log(enemy);
+  //aqui el ene
+  //let enemy = enemies[4]
   setEnemyStatus(enemy);
   return enemy;
 }
@@ -653,6 +695,47 @@ function setIdleAnimationClass(hero) {
   if (hero.characterClass === 'warrior') {
     action('player', 'idle');
   } else if (hero.characterClass === 'mage') {
+    action('player', 'idleMage');
+  } else {
+    action('player', 'idleHunter');
+  }
+}
+
+//maraca
+function setAttackAnimationClassEnemy(enemy) {
+  if (enemy.name === 'Flying eye') {
+    action('enemy', 'idleFlyingEye');
+  } else if (enemy.name === 'mage') {
+    action('player', 'attackMage');
+  } else {
+    action('player', 'attackHunter');
+  }
+}
+
+function setHitAnimationClassEnemy(enemy) {
+  if (enemy.characterClass === 'warrior') {
+    action('player', 'playerGetHit');
+  } else if (enemy.characterClass === 'mage') {
+    action('player', 'mageGetHit');
+  } else {
+    action('player', 'hunterGetHit');
+  }
+}
+
+function setDeathAnimationClassEnemy(enemy) {
+  if (enemy.characterClass === 'warrior') {
+    action('player', 'deathPlayer');
+  } else if (enemy.characterClass === 'mage') {
+    action('player', 'deathMage');
+  } else {
+    action('player', 'deathHunter');
+  }
+}
+
+function setIdleAnimationClassEnemy(enemy) {
+  if (enemy.characterClass === 'warrior') {
+    action('player', 'idle');
+  } else if (enemy.characterClass === 'mage') {
     action('player', 'idleMage');
   } else {
     action('player', 'idleHunter');

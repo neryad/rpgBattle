@@ -1,0 +1,162 @@
+.attackSkeleton {
+  background-image: url('../../assets/characters/enemies/Skeleton/Attack.png');
+  animation: mushroomAttack 1s steps(1) infinite;
+}
+
+.deathSkeleton {
+  background-image: url('../../assets/characters/enemies/Skeleton/Death.png');
+  animation: skeletonDeath 1.0s steps(1);
+  /* background-position: -1215px;
+    animation-fill-mode: backwards; */
+  animation-fill-mode: both;
+  /* animation-iteration-count: 1; */
+
+}
+
+.getHitSkeleton{
+  background-image: url('../../assets/characters/enemies/Skeleton/Take Hit.png');
+  animation: skeletonHit 1.0s steps(1);
+  animation-fill-mode: both;
+}
+.idleSkeleton {
+  background-image: url('../../assets/characters/enemies/Skeleton/Idle.png');
+  animation: skeletonPlay 1s steps(1) infinite;
+
+}
+
+@keyframes skeletonHit {
+    0% {
+    background-position: 0px;
+  }
+
+  10% {
+    background-position: -150px;
+  }
+
+  20% {
+    background-position: -300px;
+  }
+
+  50% {
+    background-position: -450px;
+  }
+
+   /* 70% {
+    background-position: -600px;
+  } */
+
+  100% {
+    background-position: -908px;
+  }
+
+
+
+
+
+}
+
+@keyframes skeletonDeath {
+  0% {
+    background-position: 0px;
+  }
+
+  10% {
+    background-position: -150px;
+  }
+
+  20% {
+    background-position: -300px;
+  }
+
+  50% {
+    background-position: -450px;
+  }
+
+   /* 70% {
+    background-position: -600px;
+  } */
+  /* 70% {
+    background-position: -908px;
+  } */
+  100% {
+    background-position: -1059px;
+  }
+
+
+
+
+
+
+
+
+}
+
+@keyframes skeletonPlay {
+0% {
+    background-position: 0px;
+  }
+
+ 10% {
+    background-position: 150px;
+  }
+
+20% {
+    background-position: 300px;
+  }
+
+  30% {
+    background-position:450px;
+  }
+   40% {
+    background-position:600px;
+  }
+   50% {
+    background-position:750px;
+  }
+   60% {
+    background-position:900px;
+  }
+
+   80% {
+    background-position:1050px;
+  }
+   100% {
+    background-position:1200px;
+  }
+
+
+}
+@keyframes skeletonAttack {
+0% {
+    background-position: 0px;
+  }
+
+ 10% {
+    background-position: 150px;
+  }
+
+20% {
+    background-position: 300px;
+  }
+
+  30% {
+    background-position:450px;
+  }
+   40% {
+    background-position:600px;
+  }
+   50% {
+    background-position:750px;
+  }
+   60% {
+    background-position:900px;
+  }
+
+   80% {
+    background-position:1050px;
+  }
+   100% {
+    background-position:1200px;
+  }
+
+}

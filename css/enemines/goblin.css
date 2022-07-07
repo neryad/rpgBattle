@@ -1,0 +1,162 @@
+.attackGoblin {
+  background-image: url('../../assets/characters/enemies/Goblin/Attack.png');
+  animation: goblinAttack 1s steps(1) infinite;
+}
+
+.deathGoblin {
+  background-image: url('../../assets/characters/enemies/Goblin/Death.png');
+  animation: goblinDeath 1.0s steps(1);
+  /* background-position: -1215px;
+    animation-fill-mode: backwards; */
+  animation-fill-mode: both;
+  /* animation-iteration-count: 1; */
+
+}
+
+.getHitGoblin {
+  background-image: url('../../assets/characters/enemies/Goblin/Take Hit.png');
+  animation: goblinHit 1.0s steps(1);
+  animation-fill-mode: both;
+}
+.idleGoblin {
+  background-image: url('../../assets/characters/enemies/Goblin/Idle.png');
+  animation: goblinPlay 1s steps(1) infinite;
+
+}
+
+@keyframes goblinHit {
+    0% {
+    background-position: 0px;
+  }
+
+  10% {
+    background-position: -150px;
+  }
+
+  20% {
+    background-position: -300px;
+  }
+
+  50% {
+    background-position: -450px;
+  }
+
+   /* 70% {
+    background-position: -600px;
+  } */
+
+  100% {
+    background-position: -908px;
+  }
+
+
+
+
+
+}
+
+@keyframes goblinDeath {
+  0% {
+    background-position: 0px;
+  }
+
+  10% {
+    background-position: -150px;
+  }
+
+  20% {
+    background-position: -300px;
+  }
+
+  50% {
+    background-position: -450px;
+  }
+
+   /* 70% {
+    background-position: -600px;
+  } */
+  /* 70% {
+    background-position: -908px;
+  } */
+  100% {
+    background-position: -1059px;
+  }
+
+
+
+
+
+
+
+
+}
+
+@keyframes goblinPlay {
+0% {
+    background-position: 0px;
+  }
+
+ 10% {
+    background-position: 150px;
+  }
+
+20% {
+    background-position: 300px;
+  }
+
+  30% {
+    background-position:450px;
+  }
+   40% {
+    background-position:600px;
+  }
+   50% {
+    background-position:750px;
+  }
+   60% {
+    background-position:900px;
+  }
+
+   80% {
+    background-position:1050px;
+  }
+   100% {
+    background-position:1200px;
+  }
+
+
+}
+@keyframes goblinAttack {
+0% {
+    background-position: 0px;
+  }
+
+ 10% {
+    background-position: 150px;
+  }
+
+20% {
+    background-position: 300px;
+  }
+
+  30% {
+    background-position:450px;
+  }
+   40% {
+    background-position:600px;
+  }
+   50% {
+    background-position:750px;
+  }
+   60% {
+    background-position:900px;
+  }
+
+   80% {
+    background-position:1050px;
+  }
+   100% {
+    background-position:1200px;
+  }
+
+}

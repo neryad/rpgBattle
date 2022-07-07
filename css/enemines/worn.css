@@ -1,0 +1,207 @@
+.attackEnemy {
+  background-image: url('../../assets/characters/enemies/Worm/Attack.png');
+  animation: enemyAttack 1s steps(1) infinite;
+}
+
+.deathEnemy {
+  background-image: url('../../assets/characters/enemies/Worm/Death.png');
+  animation: enemyDeath 1.0s steps(1);
+  /* background-position: -1215px;
+    animation-fill-mode: backwards; */
+  animation-fill-mode: both;
+  /* animation-iteration-count: 1; */
+
+}
+
+.enemyGetHit {
+  background-image: url('../../assets/characters/enemies/Worm/GetHit.png');
+  animation: enemyHit 1.0s steps(1);
+  animation-fill-mode: both;
+}
+.idleEnemy {
+  background-image: url('../../assets/characters/enemies/Worm/Idle.png');
+  animation: playEnemy 1s steps(1) infinite;
+
+}
+
+@keyframes enemyHit {
+  0% {
+    background-position: 0px;
+  }
+
+ 30% {
+    background-position: 90px;
+  }
+
+60% {
+    background-position: 180px;
+  }
+
+  100% {
+    background-position:270px;
+  }
+
+  /* 30% {
+    background-position: 405px;
+  }
+
+  40% {
+    background-position: 540px;
+
+  } */
+
+
+}
+@keyframes enemyDeath {
+  0% {
+    background-position: 0px;
+  }
+
+  10% {
+    background-position: -90px;
+  }
+
+  20% {
+    background-position: -180px;
+  }
+
+  30% {
+    background-position: -270px;
+  }
+
+  40% {
+    background-position: -360px;
+
+  }
+  50% {
+    background-position: -450px;
+  }
+
+  60% {
+    background-position: -540px;
+  }
+
+  100% {
+    background-position: -630px;
+  }
+
+
+
+
+
+
+
+
+}
+@keyframes playEnemy {
+  0% {
+    background-position: 0px;
+  }
+
+  10% {
+    background-position:90px;
+  }
+
+  20% {
+    background-position: 180px;
+  }
+  30% {
+    background-position: 270px;
+  }
+
+  40% {
+    background-position: 360px;
+  }
+
+  50% {
+    background-position: 450px;
+  }
+  60% {
+    background-position: 540px;
+  }
+  70% {
+    background-position: 630px;
+  }
+  80% {
+    background-position: 720px;
+  }
+
+  100% {
+    background-position: 810px;
+  }
+
+
+
+}
+@keyframes enemyAttack {
+  0% {
+    background-position: 0px;
+  }
+
+  6.25%{
+    background-position: 90px;
+  }
+
+  12.5% {
+    background-position: 180px;
+  }
+
+  18.75% {
+    background-position: 270px;
+  }
+
+  25% {
+    background-position: 360px;
+  }
+
+  31.25% {
+    background-position: 450px;
+  }
+
+  37.5% {
+    background-position: 540px;
+  }
+
+  43.75% {
+    background-position: 630px;
+  }
+
+  50% {
+    background-position: 720px;
+  }
+
+  56.25% {
+    background-position: 810px;
+  }
+
+  62.5% {
+    background-position: 900px;
+  }
+
+  68.75% {
+    background-position: 990px;
+  }
+
+  75% {
+    background-position: 1080px;
+  }
+
+  81.25% {
+    background-position: 1170px;
+  }
+
+  87.5% {
+    background-position: 1260px;
+  }
+
+  93.75% {
+    background-position: 1350px;
+  }
+
+  100% {
+    background-position: 1440px;
+  }
+
+
+
+}
