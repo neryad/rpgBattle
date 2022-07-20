@@ -4,6 +4,8 @@ Es un juego estilo rpg de pelea basado en turnos, donde seleccionamos un hero [G
 Cada persona en su turno puede atacar o defenderse, tambien cuando logramos una x cantidad de golpes podemos usar un ataque especial. El enemigo puede
 de forma aleatorio defenderse.
 
+![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/20806101/179986269-ce729f7c-e759-486e-bda0-40212c223375.gif)
+
 ## Que se uso para hacer este juego?
 
 Se uso solamente 
@@ -28,4 +30,4 @@ Si en un futuro quiero mejorar muchas cosas asi que esta seria la primera versio
 
 Claro has un fork y me mandas un pull request :D 
 
-![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/20806101/179986269-ce729f7c-e759-486e-bda0-40212c223375.gif)
+
