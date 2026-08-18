@@ -1,6 +1,6 @@
 import { SPRITES, CELLS } from './sprites.js';
 
-const PREFIXES = ['warrior', 'mage', 'hunter', 'worm', 'flyingeye', 'goblin', 'mushroom', 'skeleton'];
+const PREFIXES = Object.keys(SPRITES);
 
 let playerEl = null;
 let enemyEl = null;
@@ -43,10 +43,12 @@ export function setIdentity(entity, key) {
 }
 
 export async function setIdle(entity, key) {
+  const el = elOf(entity);
+  if (!el) return;
   const cfg = SPRITES[key] && SPRITES[key].idle;
   if (!cfg) return;
   setIdentity(entity, key);
-  applyAnim(elOf(entity), key, 'idle', cfg);
+  applyAnim(el, key, 'idle', cfg);
 }
 
 function baseTransform(entity) {
@@ -61,6 +63,7 @@ export async function playScript(entity, steps) {
   if (running.has(entity)) return;
   running.add(entity);
   const el = elOf(entity);
+  if (!el) { running.delete(entity); return; }
   try {
     for (const step of steps) {
       const cfg = SPRITES[step.key] && SPRITES[step.key][step.anim];
@@ -88,6 +91,8 @@ export async function playScript(entity, steps) {
       }
     }
   } finally {
+    el.classList.remove('motion');
+    el.style.transform = baseTransform(entity);
     running.delete(entity);
   }
 }
