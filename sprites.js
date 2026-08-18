@@ -1,5 +1,16 @@
 export const ANIMS = ['idle', 'attack', 'hit', 'death'];
 
+export const CELLS = {
+  warrior:   { w: 135, h: 135 },
+  mage:      { w: 231, h: 190 },
+  hunter:    { w: 100, h: 100 },
+  worm:      { w: 90,  h: 90 },
+  flyingeye: { w: 150, h: 150 },
+  goblin:    { w: 150, h: 150 },
+  mushroom:  { w: 150, h: 150 },
+  skeleton:  { w: 150, h: 150 },
+};
+
 export const SPRITES = {
   warrior: {
     idle:   { frames: 10, sheetW: 1350, dur: 800,  loop: true },
