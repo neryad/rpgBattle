@@ -390,4 +390,12 @@ img {
   width: 100%;
 }
 
+.motion { transition: transform 0.12s linear; }
+
+.character-image,
+.enemy-image {
+  position: relative;
+  z-index: 1;
+}
+
 
