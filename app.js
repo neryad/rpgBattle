@@ -480,16 +480,3 @@ async function playerSpecial(player, target) {
 document.querySelector('.actions').style.display = 'none';
 document.querySelector('.log').style.display = 'none';
 document.querySelector('.characters').style.display = 'none';
-// Helper
-// function action(character, type) {
-//   const entity = (character === 'player') ? sprite : spriteEnemy
-
-//   entity.classList.add(type)
-//   setTimeout(() => { entity.classList.remove(type) }, 1000)
-// }
-
-// action('enemy', 'attackEnemy')
-// action('player', 'playerGetHit')
-// await sleep(1000)
-// action('enemy', 'idle')
-// action('player', 'idle')
