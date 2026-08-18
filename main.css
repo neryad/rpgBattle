@@ -138,7 +138,7 @@ img {
 .sprite-anim-base {
   animation-name: spriteStep;
   animation-duration: var(--dur);
-  animation-timing-function: steps(var(--frames), end);
+  animation-timing-function: steps(var(--steps), end);
   background-size: auto;
 }
 .sprite-loop { animation-iteration-count: infinite; }
@@ -149,7 +149,7 @@ img {
 
 @keyframes spriteStep {
   from { background-position: 0 0; }
-  to { background-position: calc(-1 * var(--sheet-w)) 0; }
+  to { background-position: calc(-1 * var(--sheet-w) + var(--cell-w)) 0; }
 }
 
 #fx-layer {
