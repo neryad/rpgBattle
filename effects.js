@@ -77,7 +77,11 @@ export function shake(el, distance = 6) {
   el.classList.add('fx-shake');
   el.style.setProperty('--base-shake', base === 'none' ? 'none' : base);
   el.style.setProperty('--shake-x', `${distance}px`);
-  setTimeout(() => el.classList.remove('fx-shake'), 450);
+  setTimeout(() => {
+    el.classList.remove('fx-shake');
+    el.style.removeProperty('--base-shake');
+    el.style.removeProperty('--shake-x');
+  }, 450);
 }
 
 export function screenShake(strength = 6) {
@@ -85,5 +89,8 @@ export function screenShake(strength = 6) {
   if (!c) return;
   c.classList.add('fx-screen');
   c.style.setProperty('--shake', `${strength}px`);
-  setTimeout(() => c.classList.remove('fx-screen'), 350);
+  setTimeout(() => {
+    c.classList.remove('fx-screen');
+    c.style.removeProperty('--shake');
+  }, 350);
 }
