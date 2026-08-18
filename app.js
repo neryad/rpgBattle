@@ -153,7 +153,9 @@ function hideRestOfHeros() {
   // }
 }
 let playerHits = 0;
-let turns;
+let busy = false;
+let battleOver = false;
+let specialUnlocked = false;
 let logText = document.querySelector('#text');
 let sprite = document.querySelector('#sprite-image');
 let enemySprite = document.querySelector('#sprite-image-enemy');
@@ -167,7 +169,6 @@ const ENEMY_KEYS = {
   'Mushroom': 'mushroom',
   'Skeleton': 'skeleton',
 };
-let warriorDiv = document.getElementById('warrior');
 // let startBtn = document.querySelector('#start');
 let warriorBtn = document.querySelector('#warrior-btn');
 let hunterBtn = document.querySelector('#hunter-btn');
@@ -188,24 +189,22 @@ function startGame() {
   document.querySelector('.container').classList.add('container-battle');
   hideRestOfHeros();
   let enemy = randomEnemy();
-  setEnemyStatus(enemy);
   document.querySelector('.enemies').style.display = 'inline-flex';
   document.querySelector('#special').disabled = true;
   whoGoFirst(hero, enemy);
   // }
   document.querySelector('#attack').addEventListener('click', function () {
 
-    heroTurn(hero, enemy);
+    runTurn(() => heroTurn(hero, enemy));
   });
   document.querySelector('#defend').addEventListener('click', function () {
 
-    characterDefense(hero, enemy);
+    runTurn(() => characterDefense(hero, enemy));
   });
 
   document.querySelector('#special').addEventListener('click', function () {
 
-    playerSpecial(hero, enemy);
-    document.querySelector('#special').disabled = true;
+    runTurn(() => playerSpecial(hero, enemy));
   });
 
   document.querySelector('#reset').addEventListener('click', function () {
@@ -220,15 +219,13 @@ function resetGame() {
 }
 function whoGoFirst(hero, enemy) {
   if (hero.speed > enemy.speed) {
-
     generateText(`${hero.name}, es su turno`);
   } else {
-    document.querySelector('#attack').disabled = true;
-    document.querySelector('#defend').disabled = true;
+    setTurnControls(true);
     generateText(`${enemy.name} ha aparecido, es su turno!`);
-
-    enemyAttack(enemy, hero);
-
+    enemyAttack(enemy, hero).then(() => {
+      if (!battleOver) setTurnControls(false);
+    });
   }
 }
 
@@ -243,14 +240,29 @@ function setEnemyStatus(enemy) {
   setIdle('enemy', key);
 }
 
+function setTurnControls(disabled) {
+  document.querySelector('#attack').disabled = disabled;
+  document.querySelector('#defend').disabled = disabled;
+  document.querySelector('#special').disabled = disabled || !specialUnlocked;
+}
+
+function runTurn(fn) {
+  if (busy || battleOver) return;
+  busy = true;
+  setTurnControls(true);
+  Promise.resolve()
+    .then(fn)
+    .finally(() => {
+      if (!battleOver) setTurnControls(false);
+      busy = false;
+    });
+}
+
 document.querySelector('.enemies').style.display = 'none';
 
 async function heroTurn(player, target) {
   const playerKey = player.characterClass;
   const enemyKey = ENEMY_KEYS[target.name] || 'worm';
-
-  document.querySelector('#attack').disabled = true;
-  document.querySelector('#defend').disabled = true;
 
   const enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
   if (enemyDefendNumber === 7) {
@@ -263,6 +275,7 @@ async function heroTurn(player, target) {
         onHit: () => {
           const damage = target.strength - player.defense;
           target.health -= damage;
+          if (target.health < 0) target.health = 0;
           document.querySelector('#enemy-hp').value = target.health;
           flash(enemySprite, 'rgba(160,200,255,.95)');
           damageNumber(enemySprite, damage, 'enemy');
@@ -271,24 +284,18 @@ async function heroTurn(player, target) {
       },
     ]);
     await setIdle('enemy', enemyKey);
-    document.querySelector('#attack').disabled = false;
-    document.querySelector('#defend').disabled = false;
+    if (target.health <= 0) {
+      battleOver = true;
+      generateText(`${target.name} ha sido derrotado por ${player.name}, Has ganado valiente ${player.name}`);
+      setTurnControls(true);
+      document.querySelector('#reset').style.display = 'inline-flex';
+      play('enemy', { key: enemyKey, anim: 'death' });
+    }
     return;
   }
 
   let damage = Math.floor(Math.random() * player.strength) * 1.5;
   playerHits++;
-  if (playerHits === 7) {
-    document.querySelector('#special').disabled = false;
-    playerHits = 0;
-  }
-
-  if (damage === player.criticalChance) {
-    damage = Math.floor(Math.random() * player.strength) * 3;
-    generateText(`${player.name} hizo un golpe crítico a ${target.name} por ${damage} de daño`);
-  } else {
-    generateText(`${player.name} golpeó a ${target.name} por ${damage} de daño.`);
-  }
 
   await playScript('player', [
     {
@@ -297,6 +304,12 @@ async function heroTurn(player, target) {
       moveX: 46,
       hitAt: 0.6,
       onHit: () => {
+        if (damage === player.criticalChance) {
+          damage = Math.floor(Math.random() * player.strength) * 3;
+          generateText(`${player.name} hizo un golpe crítico a ${target.name} por ${damage} de daño`);
+        } else {
+          generateText(`${player.name} golpeó a ${target.name} por ${damage} de daño.`);
+        }
         target.health -= damage;
         if (target.health < 0) target.health = 0;
         document.querySelector('#enemy-hp').value = target.health;
@@ -306,17 +319,21 @@ async function heroTurn(player, target) {
         damageNumber(enemySprite, damage, 'enemy');
         shake(enemySprite.parentElement, 10);
         screenShake();
+        if (playerHits === 7) {
+          specialUnlocked = true;
+          playerHits = 0;
+        }
       },
     },
   ]);
 
   if (target.health <= 0) {
+    battleOver = true;
     generateText(`${target.name} ha sido derrotado por ${player.name}, Has ganado valiente ${player.name}`);
-    document.querySelector('#attack').disabled = true;
-    document.querySelector('#defend').disabled = true;
-    document.querySelector('#special').disabled = true;
+    setTurnControls(true);
     document.querySelector('#reset').style.display = 'inline-flex';
     play('enemy', { key: enemyKey, anim: 'death' });
+    setIdle('player', playerKey);
     return;
   }
 
@@ -371,18 +388,16 @@ async function enemyAttack(enemy, heroPlayer) {
   ]);
 
   if (heroPlayer.health <= 0) {
+    battleOver = true;
     generateText(`${heroPlayer.name} ha sido derrotado por ${enemy.name}, Game Over`);
-    document.querySelector('#attack').disabled = true;
-    document.querySelector('#defend').disabled = true;
-    document.querySelector('#special').disabled = true;
+    setTurnControls(true);
     document.querySelector('#reset').style.display = 'inline-flex';
     play('player', { key: playerKey, anim: 'death' });
+    setIdle('enemy', enemyKey);
     return;
   }
 
   await setIdle('player', playerKey);
-  document.querySelector('#attack').disabled = false;
-  document.querySelector('#defend').disabled = false;
 }
 async function characterDefense(character, target) {
   const enemyKey = ENEMY_KEYS[target.name] || 'worm';
@@ -407,12 +422,12 @@ async function characterDefense(character, target) {
   ]);
 
   if (character.health <= 0) {
+    battleOver = true;
     generateText(`${character.name} ha sido derrotado por ${target.name}, Game Over`);
-    document.querySelector('#attack').disabled = true;
-    document.querySelector('#defend').disabled = true;
-    document.querySelector('#special').disabled = true;
+    setTurnControls(true);
     document.querySelector('#reset').style.display = 'inline-flex';
     play('player', { key: character.characterClass, anim: 'death' });
+    setIdle('enemy', enemyKey);
     return;
   }
   await setIdle('player', character.characterClass);
@@ -428,16 +443,12 @@ function randomEnemy() {
   return enemy;
 }
 
-function randomNumber() {
-  const number = Math.floor(Math.random() * 99);
-  return number;
-}
-
 async function playerSpecial(player, target) {
   const playerKey = player.characterClass;
   const enemyKey = ENEMY_KEYS[target.name] || 'worm';
   const damage = player.strength * 2.5;
   const enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
+  specialUnlocked = false;
   generateText(`${player.name} usa el especial: ${player.specialAttack}.`);
 
   await playScript('player', [
@@ -448,7 +459,7 @@ async function playerSpecial(player, target) {
       hitAt: 0.6,
       onHit: () => {
         let dmg = damage;
-        if (enemyDefendNumber >= 7) dmg = Math.max(0, damage - 5);
+        if (enemyDefendNumber === 7) dmg = Math.max(0, damage - 5);
         target.health -= dmg;
         if (target.health < 0) target.health = 0;
         document.querySelector('#enemy-hp').value = target.health;
@@ -463,12 +474,12 @@ async function playerSpecial(player, target) {
   ]);
 
   if (target.health <= 0) {
+    battleOver = true;
     generateText(`${target.name} ha sido derrotado por ${player.name}, Has ganado valiente ${player.name}`);
-    document.querySelector('#attack').disabled = true;
-    document.querySelector('#defend').disabled = true;
-    document.querySelector('#special').disabled = true;
+    setTurnControls(true);
     document.querySelector('#reset').style.display = 'inline-flex';
     play('enemy', { key: enemyKey, anim: 'death' });
+    setIdle('player', playerKey);
     return;
   }
 
