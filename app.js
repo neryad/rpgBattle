@@ -14,8 +14,8 @@ let warrior = {
 
 let mage = {
   name: 'Mage',
-  health: 30,
-  strength: 7,
+  health: 60,
+  strength: 12,
   defense: 17,
   speed: 16,
   intelligence: 17,
@@ -273,7 +273,7 @@ async function heroTurn(player, target) {
         moveX: 12,
         hitAt: 0.7,
         onHit: () => {
-          const damage = target.strength - player.defense;
+          const damage = Math.max(1, Math.floor(Math.random() * player.strength) * 1.5 - target.defense);
           target.health -= damage;
           if (target.health < 0) target.health = 0;
           document.querySelector('#enemy-hp').value = target.health;
@@ -294,7 +294,7 @@ async function heroTurn(player, target) {
     return;
   }
 
-  let damage = Math.floor(Math.random() * player.strength) * 1.5;
+  let damage = Math.max(1, Math.floor(Math.random() * player.strength) * 1.5 - target.defense * 0.5);
   playerHits++;
 
   await playScript('player', [
@@ -304,8 +304,8 @@ async function heroTurn(player, target) {
       moveX: 46,
       hitAt: 0.6,
       onHit: () => {
-        if (damage === player.criticalChance) {
-          damage = Math.floor(Math.random() * player.strength) * 3;
+        if (Math.random() * 100 < player.criticalChance) {
+          damage = Math.max(1, Math.floor(Math.random() * player.strength) * 3 - target.defense * 0.5);
           generateText(`${player.name} hizo un golpe crítico a ${target.name} por ${damage} de daño`);
         } else {
           generateText(`${player.name} golpeó a ${target.name} por ${damage} de daño.`);
@@ -367,7 +367,7 @@ async function enemyAttack(enemy, heroPlayer) {
   const enemyKey = ENEMY_KEYS[enemy.name] || 'worm';
   await setIdle('enemy', enemyKey);
 
-  const damage = Math.floor(Math.random() * enemy.strength) * 1.5;
+  const damage = Math.max(1, Math.floor(Math.random() * enemy.strength) * 1.5 - heroPlayer.defense * 0.5);
 
   await playScript('enemy', [
     {
@@ -410,7 +410,7 @@ async function characterDefense(character, target) {
       moveX: 12,
       hitAt: 0.6,
       onHit: () => {
-        const damage = target.strength - character.defense;
+        const damage = Math.max(1, Math.floor(Math.random() * target.strength) * 1.5 - character.defense);
         character.health -= damage;
         if (character.health < 0) character.health = 0;
         document.querySelector('#progresHealth').value = character.health;
