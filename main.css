@@ -119,180 +119,121 @@ img {
 
 }
 
-#sprite-image  {
-  /* height: 325px;
-  width: 184px; */
+#sprite-image {
   height: 135px;
   width: 135px;
-  transform: scale(2);
+  transform: var(--player-base, scale(2));
   image-rendering: pixelated;
-
+  background-repeat: no-repeat;
 }
 
-#sprite-image-enemy{
-    height: 90px;
-      width:90px;
-      /* transform: scale(2); */
-      image-rendering: pixelated;
-      filter: FlipH;
-      transform: scaleX(-1.5);
+#sprite-image-enemy {
+  height: 90px;
+  width: 90px;
+  transform: var(--enemy-base, scaleX(-1.5));
+  image-rendering: pixelated;
+  background-repeat: no-repeat;
 }
 
-.idle {
-  background-image: url('./assets/characters/heros/warrior/Idle.png');
-  animation: play 0.8s steps(1) infinite;
-
+.sprite-anim-base {
+  animation-name: spriteStep;
+  animation-duration: var(--dur);
+  animation-timing-function: steps(var(--frames), end);
+  background-size: auto;
+}
+.sprite-loop { animation-iteration-count: infinite; }
+.sprite-one {
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 }
 
-.attackPlayer {
-  background-image: url('./assets/characters/heros/warrior/Attack1.png');
-  animation: attack 0.8s steps(1) infinite;
+@keyframes spriteStep {
+  from { background-position: 0 0; }
+  to { background-position: calc(-1 * var(--sheet-w)) 0; }
 }
 
-.deathPlayer {
-  background-image: url('./assets/characters/heros/warrior/Death.png');
-  animation: death 1.0s steps(1);
-  /* background-position: -1215px;
-    animation-fill-mode: backwards; */
-  animation-fill-mode: both;
-  /* animation-iteration-count: 1; */
-
+#fx-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
 }
-.playerGetHit{
-    background-image: url('./assets/characters/heros/warrior/GetHit.png');
-      animation: hit 1.0s steps(1);
-      animation-fill-mode: both;
+.fx-flash {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  opacity: 0;
+  animation: fxFlash 0.6s ease-out forwards;
 }
-
-
-
-
-@keyframes play {
-  0% {
-    background-position: 0px;
-  }
-
-  10% {
-    background-position: 135px;
-  }
-
-  20% {
-    background-position: 270px;
-  }
-
-  30% {
-    background-position: 405px;
-  }
-
-  40% {
-    background-position: 540px;
-
-  }
-
-
-
+@keyframes fxFlash {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.7); }
 }
-
-@keyframes death {
-  0% {
-    background-position: 0px;
-  }
-
-  10% {
-    background-position: -135px;
-  }
-
-  20% {
-    background-position: -270px;
-  }
-
-  30% {
-    background-position: -405px;
-  }
-
-  40% {
-    background-position: -540px;
-
-  }
-
-  50% {
-    background-position: -675px;
-  }
-
-  60% {
-    background-position: -810px;
-  }
-
-  70% {
-    background-position: -945px;
-  }
-
-  /* 80% {
-    background-position: -1080px;
-
-  } */
-
-  /* 90% {
-    background-position: -1080px;
-
-  } */
-
-  100% {
-    background-position: -1080px;
-
-  }
-
-
-
+.fx-slash {
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(38deg);
+  width: 16px;
+  height: 80px;
+  background: linear-gradient(to bottom, #fff, #ffd23f);
+  border-radius: 8px;
+  opacity: 0;
+  animation: fxSlash 0.45s ease-out forwards;
 }
-
-@keyframes attack {
-  0% {
-    background-position: 0px;
-  }
-
-  25% {
-    background-position: 135px;
-  }
-
-  50% {
-    background-position: 270px;
-  }
-
-  75% {
-    background-position: 405px;
-  }
+@keyframes fxSlash {
+  0% { opacity: 1; transform: translate(-50%, -50%) translateX(24px) rotate(38deg); }
+  100% { opacity: 0; transform: translate(-50%, -50%) translateX(-38px) rotate(22deg); }
 }
-
-@keyframes hit {
-  0% {
-    background-position: 0px;
-  }
-
-  20% {
-    background-position: 135px;
-  }
-
-  40% {
-    background-position: 270px;
-  }
-     60% {
-       background-position: 135px;
-     }
-            100% {
-              background-position: 0px;
-            }
-
-  /* 30% {
-    background-position: 405px;
-  }
-
-  40% {
-    background-position: 540px;
-
-  } */
-
-
+.fx-burst { position: absolute; width: 0; height: 0; }
+.fx-burst span {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  animation: fxP 0.7s ease-out forwards;
+}
+@keyframes fxP {
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.4); }
+}
+.fx-dmg {
+  position: absolute;
+  transform: translate(-50%, 0);
+  font-family: 'Macondo', cursive;
+  font-weight: 700;
+  text-shadow: 0 0 3px #000;
+  opacity: 0;
+  animation: fxDmg 0.9s ease-out forwards;
+}
+.fx-dmg-enemy { color: #ffd23f; font-size: 20px; }
+.fx-dmg-player { color: #ff5a4d; font-size: 20px; }
+@keyframes fxDmg {
+  0% { opacity: 0; transform: translate(-50%, 0); }
+  15% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -24px); }
+}
+.character-image.fx-shake,
+.enemy-image.fx-shake {
+  animation: fxShake 0.4s steps(2, end);
+}
+@keyframes fxShake {
+  0% { transform: var(--base-shake, none) translateX(0); }
+  25% { transform: var(--base-shake, none) translateX(var(--shake-x)); }
+  50% { transform: var(--base-shake, none) translateX(calc(var(--shake-x) * -1)); }
+  75% { transform: var(--base-shake, none) translateX(calc(var(--shake-x) * 0.5)); }
+  100% { transform: var(--base-shake, none) translateX(0); }
+}
+.container-battle.fx-screen {
+  animation: fxScreen 0.35s steps(2, end);
+}
+@keyframes fxScreen {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(var(--shake), calc(var(--shake) * -1)); }
+  50% { transform: translate(calc(var(--shake) * -1), var(--shake)); }
+  75% { transform: translate(var(--shake), var(--shake)); }
+  100% { transform: translate(0, 0); }
 }
 
 
@@ -331,6 +272,7 @@ img {
     border: 2px solid currentColor; */
 }
 .characters {
+  position: relative;
   /* background: var(--raisin-black); */
   width: 90vw;
   /* height: 50vh; */

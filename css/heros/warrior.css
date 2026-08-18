@@ -1,0 +1,5 @@
+.warrior { --player-base: scale(4); width: 135px; height: 135px; }
+.warrior-idle   { background-image: url('../../assets/characters/heros/warrior/Idle.png'); }
+.warrior-attack { background-image: url('../../assets/characters/heros/warrior/Attack1.png'); }
+.warrior-hit    { background-image: url('../../assets/characters/heros/warrior/GetHit.png'); }
+.warrior-death  { background-image: url('../../assets/characters/heros/warrior/Death.png'); }
