@@ -120,16 +120,16 @@ img {
 }
 
 #sprite-image {
-  height: 135px;
-  width: 135px;
+  height: var(--cell-h, 135px);
+  width: var(--cell-w, 135px);
   transform: var(--player-base, scale(2));
   image-rendering: pixelated;
   background-repeat: no-repeat;
 }
 
 #sprite-image-enemy {
-  height: 90px;
-  width: 90px;
+  height: var(--cell-h, 90px);
+  width: var(--cell-w, 90px);
   transform: var(--enemy-base, scaleX(-1.5));
   image-rendering: pixelated;
   background-repeat: no-repeat;

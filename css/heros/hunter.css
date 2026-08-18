@@ -1,4 +1,4 @@
-.hunter { --player-base: scale(4); width: 100px; height: 100px; }
+.hunter { --player-base: scale(4); }
 .hunter-idle   { background-image: url('../../assets/characters/heros/hunter/Idle.png'); }
 .hunter-attack { background-image: url('../../assets/characters/heros/hunter/Attack.png'); }
 .hunter-hit    { background-image: url('../../assets/characters/heros/hunter/GetHit.png'); }

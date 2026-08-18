@@ -1,8 +1,4 @@
-.flyingeye {
-  --enemy-base: scale(-1.6, 1.6);
-  width: 150px;
-  height: 150px;
-}
+.flyingeye { --enemy-base: scale(-1.6, 1.6); }
 .flyingeye-idle   { background-image: url('../../assets/characters/enemies/Flying eye/Flight.png'); }
 .flyingeye-attack { background-image: url('../../assets/characters/enemies/Flying eye/Attack.png'); }
 .flyingeye-hit    { background-image: url('../../assets/characters/enemies/Flying eye/Take Hit.png'); }

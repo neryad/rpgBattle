@@ -1,8 +1,4 @@
-.skeleton {
-  --enemy-base: scale(-1.6, 1.6);
-  width: 150px;
-  height: 150px;
-}
+.skeleton { --enemy-base: scale(-1.6, 1.6); }
 .skeleton-idle   { background-image: url('../../assets/characters/enemies/Skeleton/Idle.png'); }
 .skeleton-attack { background-image: url('../../assets/characters/enemies/Skeleton/Attack.png'); }
 .skeleton-hit    { background-image: url('../../assets/characters/enemies/Skeleton/Take Hit.png'); }

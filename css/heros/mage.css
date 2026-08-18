@@ -1,4 +1,4 @@
-.mage { --player-base: scale(2); width: 231px; height: 190px; }
+.mage { --player-base: scale(2); }
 .mage-idle   { background-image: url('../../assets/characters/heros/mage/Idle.png'); }
 .mage-attack { background-image: url('../../assets/characters/heros/mage/Attack1.png'); }
 .mage-hit    { background-image: url('../../assets/characters/heros/mage/Hit.png'); }
