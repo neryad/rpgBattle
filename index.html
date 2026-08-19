@@ -4,242 +4,177 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Macondo&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Macondo&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="main.css" />
-    <link rel="stylesheet" href="./css/heros/hunter.css">
-     <link rel="stylesheet" href="./css/heros/warrior.css">
-      <link rel="stylesheet" href="./css/heros/mage.css">
-      <link rel="stylesheet" href="./css/enemines/worn.css">
-      <link rel="stylesheet" href="./css/enemines/flyingeye.css">
-      <link rel="stylesheet" href="./css/enemines/goblin.css">
-      <link rel="stylesheet" href="./css/enemines/mushroom.css">
-      <link rel="stylesheet" href="./css/enemines/skeleton.css">
-    <title>D&C</title>
+    <link rel="stylesheet" href="./css/heros/hunter.css" />
+    <link rel="stylesheet" href="./css/heros/warrior.css" />
+    <link rel="stylesheet" href="./css/heros/mage.css" />
+    <link rel="stylesheet" href="./css/enemines/worn.css" />
+    <link rel="stylesheet" href="./css/enemines/flyingeye.css" />
+    <link rel="stylesheet" href="./css/enemines/goblin.css" />
+    <link rel="stylesheet" href="./css/enemines/mushroom.css" />
+    <link rel="stylesheet" href="./css/enemines/skeleton.css" />
+    <title>Dungeons &amp; Code</title>
   </head>
   <body>
     <div class="container">
-      <div class="gametittle">
-        <h1>Dungeons & Code</h1>
-      </div>
-      <div class="bodyCotent">
+      <header class="gametittle">
+        <h1>Dungeons &amp; Code</h1>
+        <p class="tagline">Choose your hero, the dungeon awaits</p>
+      </header>
 
-
-
-      <div id="heroes" class="heroes">
-        <div id="Warrior" class="hero">
-          <div class="hero-image">
-            <img src="./assets/icons/espadachin.png" alt="">
-          </div>
-           <div class="hero-name">
-            <span>Warrior</span>
-          </div>
-          <div class="hero-info">
-            <div class="info-1">
-              <ul>
-              <li><span>Hp : <span>100 </span></span></li>
-                       <li><span>Str : <span>17 </span></span></li>
-              </ul>
+      <main class="bodyCotent">
+        <!-- ============ HERO SELECTION ============ -->
+        <section id="heroes" class="heroes">
+          <article id="Warrior" class="hero hero--warrior">
+            <div class="hero-image">
+              <img src="./assets/icons/espadachin.png" alt="Warrior icon" />
             </div>
-             <div class="info-2">
-              <ul>
-                <li><span>Def : <span>16 </span></span></li>
-                       <li><span>Spd : <span>13</span></span></li>
-              </ul>
-             </div>
-          </div>
-          <div class="heroSelection">
-            <button id="warrior-btn" value="Warrior"> Seleccionar e inicar</button>
-          </div>
-        </div>
-
-          <div id="Hunter" class="hero">
-          <div class="hero-image">
-            <img src="./assets/icons/arco.png" alt="">
-          </div>
-           <div class="hero-name">
-            <span>Hunter</span>
-          </div>
-          <div class="hero-info">
-            <div class="info-1">
-              <ul>
-              <li><span>Hp : <span>100 </span></span></li>
-                       <li><span>Str : <span>13 </span></span></li>
-              </ul>
+            <div class="hero-name">
+              <h2>Warrior</h2>
+              <small>Tank / Melee</small>
             </div>
-             <div class="info-2">
-              <ul>
-                <li><span>Def : <span>16 </span></span></li>
-                       <li><span>Spd : <span>16 </span></span></li>
-              </ul>
-             </div>
-          </div>
-            <div class="heroSelection">
-            <button  id="hunter-btn"> Seleccionar e inicar</button>
-          </div>
-        </div>
-
-          <div id="Mage" class="hero">
-          <div class="hero-image">
-            <img src="./assets/icons/mago.png" alt="">
-          </div>
-           <div class="hero-name">
-            <span>Mage</span>
-          </div>
-          <div class="hero-info">
-            <div class="info-1">
-              <ul>
-              <li><span>Hp : <span>60 </span></span></li>
-                       <li><span>Str : <span>12 </span></span></li>
-              </ul>
+            <div class="hero-stats">
+              <div class="stat"><span class="stat-label">HP</span><span class="stat-bar"><i style="--val:100%"></i></span><b>120</b></div>
+              <div class="stat"><span class="stat-label">STR</span><span class="stat-bar"><i style="--val:80%"></i></span><b>16</b></div>
+              <div class="stat"><span class="stat-label">DEF</span><span class="stat-bar"><i style="--val:80%"></i></span><b>16</b></div>
+              <div class="stat"><span class="stat-label">SPD</span><span class="stat-bar"><i style="--val:50%"></i></span><b>10</b></div>
+              <div class="stat"><span class="stat-label">INT</span><span class="stat-bar"><i style="--val:40%"></i></span><b>8</b></div>
             </div>
-             <div class="info-2">
-              <ul>
-                <li><span>Def : <span>17</span></span></li>
-                       <li><span>Spd : <span>16 </span></span></li>
-              </ul>
-             </div>
-          </div>
-            <div class="heroSelection">
-            <button  id="mage-btn"> Seleccionar e inicar</button>
-          </div>
-        </div>
-      </div>
+            <div class="hero-meta">
+              <span>Crit 10%</span>
+              <span>Eva 5%</span>
+            </div>
+            <button id="warrior-btn" class="hero-select">Seleccionar e iniciar</button>
+          </article>
 
-          <div class="characters">
-         <div class="character">
-          <div class="character-hp">
-            <span>HP</span>
-            <progress id="progresHealth"  max="100"></progress>
-          </div>
-          <div class="charcter-info">
-            <div class="character-image">
+          <article id="Hunter" class="hero hero--hunter">
+            <div class="hero-image">
+              <img src="./assets/icons/arco.png" alt="Hunter icon" />
+            </div>
+            <div class="hero-name">
+              <h2>Hunter</h2>
+              <small>DPS / Crit / Evasion</small>
+            </div>
+            <div class="hero-stats">
+              <div class="stat"><span class="stat-label">HP</span><span class="stat-bar"><i style="--val:75%"></i></span><b>90</b></div>
+              <div class="stat"><span class="stat-label">STR</span><span class="stat-bar"><i style="--val:70%"></i></span><b>14</b></div>
+              <div class="stat"><span class="stat-label">DEF</span><span class="stat-bar"><i style="--val:55%"></i></span><b>11</b></div>
+              <div class="stat"><span class="stat-label">SPD</span><span class="stat-bar"><i style="--val:95%"></i></span><b>19</b></div>
+              <div class="stat"><span class="stat-label">INT</span><span class="stat-bar"><i style="--val:60%"></i></span><b>12</b></div>
+            </div>
+            <div class="hero-meta">
+              <span>Crit 20%</span>
+              <span>Eva 15%</span>
+            </div>
+            <button id="hunter-btn" class="hero-select">Seleccionar e iniciar</button>
+          </article>
 
-              <div class="" id="sprite-image">
+          <article id="Mage" class="hero hero--mage">
+            <div class="hero-image">
+              <img src="./assets/icons/mago.png" alt="Mage icon" />
+            </div>
+            <div class="hero-name">
+              <h2>Mage</h2>
+              <small>Magic DPS / Debuff</small>
+            </div>
+            <div class="hero-stats">
+              <div class="stat"><span class="stat-label">HP</span><span class="stat-bar"><i style="--val:58%"></i></span><b>70</b></div>
+              <div class="stat"><span class="stat-label">STR</span><span class="stat-bar"><i style="--val:40%"></i></span><b>8</b></div>
+              <div class="stat"><span class="stat-label">DEF</span><span class="stat-bar"><i style="--val:50%"></i></span><b>10</b></div>
+              <div class="stat"><span class="stat-label">SPD</span><span class="stat-bar"><i style="--val:70%"></i></span><b>14</b></div>
+              <div class="stat"><span class="stat-label">INT</span><span class="stat-bar"><i style="--val:100%"></i></span><b>20</b></div>
+            </div>
+            <div class="hero-meta">
+              <span>Crit 8%</span>
+              <span>Eva 8%</span>
+            </div>
+            <button id="mage-btn" class="hero-select">Seleccionar e iniciar</button>
+          </article>
+        </section>
 
-
+        <!-- ============ BATTLE ARENA ============ -->
+        <section class="characters">
+          <div class="arena">
+            <div class="character">
+              <div class="hud hud--player">
+                <div class="hud-head">
+                  <div class="hud-name">
+                    <span id="player-name" class="name">—</span>
+                    <span id="player-role" class="role">—</span>
+                  </div>
+                  <div class="hud-hp">
+                    <span class="hp-label">HP</span>
+                    <progress id="progresHealth" max="100" value="100"></progress>
+                    <span id="player-status" class="status-line"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="sprite-zone">
+                <div class="character-image">
+                  <div class="" id="sprite-image"></div>
+                </div>
               </div>
             </div>
-            <!-- <div class="character-stats">
-              <ul>
-                <li>
-                  <span>HP:</span>
-                  <span id="warrior-hp">100</span>
-                </li>
-                <li>
-                  <span>Str:</span>
-                  <span id="warrior-str">100</span>
-                </li>
-                <li>
-                  <span>Def:</span>
-                  <span id="warrior-def">100</span>
-                </li>
-                <li>
-                  <span>speed:</span>
-                  <span id="warrior-speed">100</span>
-                </li>
-              </ul>
-            </div> -->
-          </div>
-        </div>
 
-
-        <!-- <div onclick="selectHero('mage')" id="mage" class="character">
-          <div class="character-name">
-            <span>Mage</span>
-          </div>
-          <div class="charcter-info">
-            <div class="character-image">
-              <img src="assets/characters/heros/mage/mage.png" alt="warrior" />
+            <div class="battle-center">
+              <div id="turn-indicator" class="turn-indicator">Your Turn</div>
+              <div class="special-meter" id="special-meter">
+                <span class="meter-label">Special</span>
+                <div class="pips">
+                  <span class="pip"></span>
+                  <span class="pip"></span>
+                  <span class="pip"></span>
+                  <span class="pip"></span>
+                  <span class="pip"></span>
+                </div>
+              </div>
             </div>
-            <div class="character-stats">
-              <ul>
-                <li>
-                  <span>HP:</span>
-                  <span id="mage-hp">100</span>
-                </li>
-                <li>
-                  <span>Str:</span>
-                  <span id="mage-str">100</span>
-                </li>
-                <li>
-                  <span>Def:</span>
-                  <span id="mage-def">100</span>
-                </li>
-                <li>
-                  <span>speed:</span>
-                  <span id="mage-speed">100</span>
-                </li>
-              </ul>
+
+            <div class="enemies">
+              <div class="hud hud--enemy">
+                <div class="hud-head">
+                  <div class="hud-name">
+                    <span id="enemy-name" class="name"></span>
+                    <span id="enemy-role" class="role"></span>
+                  </div>
+                  <div class="hud-hp">
+                    <span class="hp-label">HP</span>
+                    <progress id="enemy-hp" max="100" value="100"></progress>
+                    <span id="enemy-status" class="status-line"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="sprite-zone">
+                <div class="enemy-image">
+                  <div class="" id="sprite-image-enemy"></div>
+                </div>
+              </div>
             </div>
+
+            <div id="fx-layer"></div>
           </div>
-        </div> -->
-         <div class="enemies">
-         <div class="enemy-name">
-            <span id="enemy-name"></span>
-          </div>
-            <div class="character-hp">
-            <span>HP</span>
-            <progress id="enemy-hp"  max="100"></progress>
-          </div>
-          <div class="enemy-info">
-            <div class="enemy-image">
-              <div class="" id="sprite-image-enemy"></div>
+        </section>
 
-            </div>
-            <!-- <div class="enemy-stats">
-              <ul>
-                <li>
-                  <span>HP:</span>
-                  <span id="enemy-hp">100</span>
-                </li>
-                <li>
-                  <span>Str:</span>
-                  <span id="enemy-str">100</span>
-                </li>
-                <li>
-                  <span>Def:</span>
-                  <span id="enemy-def">100</span>
-                </li>
-                <li>
-                  <span>speed:</span>
-                  <span id="enemy-speed">100</span>
-                </li>
-              </ul>
-            </div> -->
-          </div>
-        </div>
-
-        <div id="fx-layer"></div>
-      </div>
-      <!-- <div class="start">
-        <button  id="start">Start</button>
-      </div> -->
-
-
-      </div>
-
-
-        <div class="log">
+        <!-- ============ COMBAT LOG + ACTIONS ============ -->
+        <section class="log">
           <div id="log">
             <span id="text"></span>
           </div>
           <div class="actions">
-
-      <div class="actionsButtons">
-        <button class="actions"  id="attack">Attack</button>
-        <button class="actions" id="defend">Defend</button>
-        <button class="actions"  id="special">Special</button>
-        <button class="actions"  id="reset">Reiniciar juego</button>
-      </div>
-        </div>
-        </div>
-      </div>
-
-
+            <div class="actionsButtons">
+              <button id="attack" class="action-btn action-btn--attack">Attack</button>
+              <button id="defend" class="action-btn action-btn--defend">Defend</button>
+              <button id="special" class="action-btn action-btn--special">Special</button>
+              <button id="reset" class="action-btn action-btn--reset">Reiniciar</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
 
     <script src="app.js" defer type="module"></script>
-
   </body>
 </html>

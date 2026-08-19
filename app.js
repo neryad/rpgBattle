@@ -1,249 +1,123 @@
 import { setPlayerEl, setEnemyEl, setIdle, play, playScript } from './animation.js';
 import { flash, slash, particles, damageNumber, shake, screenShake } from './effects.js';
-let warrior = {
-  name: 'Warrior',
-  health: 100,
-  strength: 17,
-  defense: 16,
-  speed: 13,
-  intelligence: 11,
-  characterClass: 'warrior',
-  criticalChance: 15,
-  specialAttack: 'Sword Slash',
-};
+import {
+  HEROES,
+  ENEMIES,
+  createCombatant,
+  buildHit,
+  commitHit,
+  tickStatuses,
+  SPECIAL_HITS,
+} from './combat.js';
 
-let mage = {
-  name: 'Mage',
-  health: 60,
-  strength: 12,
-  defense: 17,
-  speed: 16,
-  intelligence: 17,
-  characterClass: 'mage',
-  criticalChance: 14,
-  specialAttack: 'Fireball meteor',
-};
-let hero;
+const STATUS_LABELS = { burn: 'Quemadura', bleed: 'Sangrado', poison: 'Veneno', frenzy: 'Frenesí' };
 
+let hero = null;
+let enemy = null;
+let busy = false;
+let battleOver = false;
 
-let hunter = {
-  name: 'Hunter',
-  health: 100,
-  strength: 13,
-  defense: 16,
-  speed: 16,
-  intelligence: 11,
-  characterClass: 'hunter',
-  criticalChance: 14,
-  specialAttack: 'Arrow of blood',
-};
+const logText = document.querySelector('#text');
+const sprite = document.querySelector('#sprite-image');
+const enemySprite = document.querySelector('#sprite-image-enemy');
+const playerStatusEl = document.querySelector('#player-status');
+const enemyStatusEl = document.querySelector('#enemy-status');
+const turnIndicator = document.querySelector('#turn-indicator');
+const specialMeter = document.querySelector('#special-meter');
 
-let enemies = [
-  {
-    name: 'Worn',
-    characterClass: 'enemy',
-    health: 100,
-    strength: 20,
-    defense: 12,
-    speed: 16,
-    intelligence: 6
-  },
-  {
-    name: 'Flying eye',
-    characterClass: 'enemy',
-    health: 100,
-    strength: 20,
-    defense: 10,
-    speed: 10,
-    intelligence: 8
-  },
-  {
-    name: 'Goblin',
-    characterClass: 'enemy',
-    health: 100,
-    strength: 20,
-    defense: 12,
-    speed: 10,
-    intelligence: 6
-  },
-  {
-    name: 'Mushroom',
-    characterClass: 'enemy',
-    health: 100,
-    strength: 20,
-    defense: 13,
-    speed: 11,
-    intelligence: 8
-  },
-  {
-    name: 'Skeleton',
-    characterClass: 'enemy',
-    health: 100,
-    strength: 20,
-    defense: 13,
-    speed: 11,
-    intelligence: 8
-  },
-];
+setPlayerEl(sprite);
+setEnemyEl(enemySprite);
+
+function generateText(text) {
+  logText.innerHTML = text;
+  return text;
+}
 
 function selectHero(characterClass) {
-  // console.log(`You have selected ${characterClass}`);
-
-  switch (characterClass) {
-    case 'warrior':
-      hero = warrior;
-
-
-      break;
-
-    case 'mage':
-      hero = mage;
-      // console.log(hero, 'hide mage');
-      break;
-
-
-    case 'hunter':
-      hero = hunter;
-      // console.log(hero, 'hunter');
-      break;
-
-    default:
-      hero = warrior;
-      // console.log(hero, 'default warrior');
-      break;
-  }
-
+  const def = HEROES[characterClass] || HEROES.warrior;
+  hero = createCombatant(def);
   startGame();
 }
 
 function hideRestOfHeros() {
-
   document.getElementById('heroes').style.display = 'none';
   document.querySelector('.gametittle').style.display = 'none';
-  // switch (characterClass) {
-  //   case 'warrior':
-  //     document.getElementById('mage').style.display = 'none';
-  //     // document.getElementById('assassins').style.display = 'none';
-  //     // document.getElementById('hunter').style.display = 'none';
-  //     // console.log('hererere');
-  //     break;
-  //   case 'mage':
-  //     document.getElementById('warrior').style.display = 'none';
-  //     // document.getElementById('assassins').style.display = 'none';
-  //     // document.getElementById('hunter').style.display = 'none';
-  //     break;
-  //   // case 'assassins':
-  //   //   document.getElementById('warrior').style.display = 'none';
-  //   //   document.getElementById('mage').style.display = 'none';
-  //   //   document.getElementById('hunter').style.display = 'none';
-  //   //   break;
-  //   // case 'hunter':
-  //   //   document.getElementById('warrior').style.display = 'none';
-  //   //   document.getElementById('mage').style.display = 'none';
-  //   //   document.getElementById('assassins').style.display = 'none';
-
-  //   //   break;
-
-  //   default:
-  //     document.getElementById('warrior').style.display = 'inline-block';
-  //     document.getElementById('mage').style.display = 'inline-block';
-  //     // document.getElementById('assassins').style.display = 'inline-block';
-  //     // document.getElementById('hunter').style.display = 'inline-block';
-  //     break;
-  // }
-}
-let playerHits = 0;
-let busy = false;
-let battleOver = false;
-let specialUnlocked = false;
-let logText = document.querySelector('#text');
-let sprite = document.querySelector('#sprite-image');
-let enemySprite = document.querySelector('#sprite-image-enemy');
-setPlayerEl(sprite);
-setEnemyEl(enemySprite);
-
-const ENEMY_KEYS = {
-  'Worn': 'worm',
-  'Flying eye': 'flyingeye',
-  'Goblin': 'goblin',
-  'Mushroom': 'mushroom',
-  'Skeleton': 'skeleton',
-};
-// let startBtn = document.querySelector('#start');
-let warriorBtn = document.querySelector('#warrior-btn');
-let hunterBtn = document.querySelector('#hunter-btn');
-let mageBtn = document.querySelector('#mage-btn');
-function startGame() {
-  if (hero == undefined) {
-    hero = warrior;
-    return;
-  }
-  setHeroStatus(hero);
-
-  document.querySelector('.bodyCotent').style.height = '50rem';
-  document.querySelector('.actions').style.display = 'inline-flex';
-  document.querySelector('.log').style.display = 'inline-flex';
-  document.querySelector('.characters').style.display = 'inline-flex';
-  document.querySelector('#reset').style.display = 'none';
-
-  document.querySelector('.container').classList.add('container-battle');
-  hideRestOfHeros();
-  let enemy = randomEnemy();
-  document.querySelector('.enemies').style.display = 'inline-flex';
-  document.querySelector('#special').disabled = true;
-  whoGoFirst(hero, enemy);
-  // }
-  document.querySelector('#attack').addEventListener('click', function () {
-
-    runTurn(() => heroTurn(hero, enemy));
-  });
-  document.querySelector('#defend').addEventListener('click', function () {
-
-    runTurn(() => characterDefense(hero, enemy));
-  });
-
-  document.querySelector('#special').addEventListener('click', function () {
-
-    runTurn(() => playerSpecial(hero, enemy));
-  });
-
-  document.querySelector('#reset').addEventListener('click', function () {
-
-    resetGame();
-  });
-}
-function resetGame() {
-
-
-  location.reload();
-}
-function whoGoFirst(hero, enemy) {
-  if (hero.speed > enemy.speed) {
-    generateText(`${hero.name}, es su turno`);
-  } else {
-    setTurnControls(true);
-    generateText(`${enemy.name} ha aparecido, es su turno!`);
-    enemyAttack(enemy, hero).then(() => {
-      if (!battleOver) setTurnControls(false);
-    });
-  }
 }
 
-function setHeroStatus(hero) {
-  document.getElementById('progresHealth').value = hero.health;
-  setIdle('player', hero.characterClass);
+function setTurnIndicator(text) {
+  if (turnIndicator) turnIndicator.textContent = text;
 }
 
-function setEnemyStatus(enemy) {
-  document.getElementById('enemy-hp').value = enemy.health;
-  const key = ENEMY_KEYS[enemy.name] || 'worm';
-  setIdle('enemy', key);
+function updateSpecialMeter() {
+  if (!specialMeter) return;
+  const pips = specialMeter.querySelectorAll('.pip');
+  const filled = hero && hero.specialUnlocked ? SPECIAL_HITS : (hero ? hero.hits : 0);
+  pips.forEach((pip, i) => pip.classList.toggle('on', i < filled));
+}
+
+function setHeroStatus(unit) {
+  const bar = document.getElementById('progresHealth');
+  bar.max = unit.maxHealth;
+  bar.value = unit.health;
+  bar.style.setProperty('--bar-color', hpColor(unit.health, unit.maxHealth));
+  document.querySelector('#player-name').textContent = unit.name;
+  document.querySelector('#player-role').textContent = unit.role;
+  setIdle('player', unit.spriteKey);
+}
+
+function setEnemyStatus(unit) {
+  const bar = document.getElementById('enemy-hp');
+  bar.max = unit.maxHealth;
+  bar.value = unit.health;
+  bar.style.setProperty('--bar-color', hpColor(unit.health, unit.maxHealth));
+  document.getElementById('enemy-name').textContent = unit.name;
+  document.querySelector('#enemy-role').textContent = unit.role;
+  setIdle('enemy', unit.spriteKey);
+}
+
+function updatePlayerBar(unit) {
+  const bar = document.getElementById('progresHealth');
+  bar.value = unit.health;
+  bar.style.setProperty('--bar-color', hpColor(unit.health, unit.maxHealth));
+}
+
+function updateEnemyBar(unit) {
+  const bar = document.getElementById('enemy-hp');
+  bar.value = unit.health;
+  bar.style.setProperty('--bar-color', hpColor(unit.health, unit.maxHealth));
+}
+
+function hpColor(hp, maxHp) {
+  const pct = maxHp ? (hp / maxHp) * 100 : 0;
+  if (pct > 60) return 'var(--hp-good)';
+  if (pct > 30) return 'var(--hp-warn)';
+  return 'var(--hp-low)';
+}
+
+function renderStatuses(unit, el) {
+  if (!el) return;
+  const active = unit.statusEffects.filter((s) => s.type !== 'frenzy');
+  el.textContent = active
+    .map((s) => `${STATUS_LABELS[s.type] || s.type} (${s.duration})`)
+    .join(' · ');
+}
+
+function statusLabel(unit, statuses) {
+  return statuses.map((s) => STATUS_LABELS[s.type] || s.type).join(', ');
+}
+
+function setSpecialReady(ready) {
+  const btn = document.querySelector('#special');
+  btn.classList.toggle('ready', ready);
+  btn.textContent = ready ? 'Special READY!' : 'Special';
+  updateSpecialMeter();
 }
 
 function setTurnControls(disabled) {
   document.querySelector('#attack').disabled = disabled;
   document.querySelector('#defend').disabled = disabled;
-  document.querySelector('#special').disabled = disabled || !specialUnlocked;
+  document.querySelector('#special').disabled = disabled || !hero.specialUnlocked;
+  setSpecialReady(hero.specialUnlocked);
 }
 
 function runTurn(fn) {
@@ -258,44 +132,103 @@ function runTurn(fn) {
     });
 }
 
-document.querySelector('.enemies').style.display = 'none';
+function trackHit(player, pending, parts) {
+  if (pending.miss) return;
+  player.hits += 1;
+  if (player.hits >= SPECIAL_HITS) {
+    player.hits = 0;
+    player.specialUnlocked = true;
+    setSpecialReady(true);
+    parts.push(`¡SPECIAL READY!`);
+  }
+  updateSpecialMeter();
+}
 
-async function heroTurn(player, target) {
-  const playerKey = player.characterClass;
-  const enemyKey = ENEMY_KEYS[target.name] || 'worm';
-
-  const enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
-  if (enemyDefendNumber === 7) {
-    await playScript('enemy', [
-      {
-        key: enemyKey,
-        anim: 'attack',
-        moveX: 12,
-        hitAt: 0.7,
-        onHit: () => {
-          const damage = Math.max(1, Math.floor(Math.random() * player.strength) * 1.5 - target.defense);
-          target.health -= damage;
-          if (target.health < 0) target.health = 0;
-          document.querySelector('#enemy-hp').value = target.health;
-          flash(enemySprite, 'rgba(160,200,255,.95)');
-          damageNumber(enemySprite, damage, 'enemy');
-          generateText(`${target.name} se defendió, tomó ${damage} de daño, turno de ${player.name}.`);
-        },
-      },
-    ]);
-    await setIdle('enemy', enemyKey);
-    if (target.health <= 0) {
-      battleOver = true;
-      generateText(`${target.name} ha sido derrotado por ${player.name}, Has ganado valiente ${player.name}`);
-      setTurnControls(true);
-      document.querySelector('#reset').style.display = 'inline-flex';
-      play('enemy', { key: enemyKey, anim: 'death' });
-    }
+function applyHitVisuals(el, pending, side) {
+  if (side === 'player') {
+    flash(el, 'rgba(255,90,77,.95)');
+    particles(el, pending.isCrit ? 14 : 7);
+    damageNumber(el, pending.damage, 'player');
+    shake(el.parentElement, -10);
+    screenShake();
     return;
   }
+  flash(el);
+  slash(el);
+  particles(el, pending.isCrit ? 16 : 9);
+  damageNumber(el, pending.damage, 'enemy');
+  shake(el.parentElement, pending.isCrit ? 14 : 10);
+  screenShake();
+}
 
-  let damage = Math.max(1, Math.floor(Math.random() * player.strength) * 1.5 - target.defense * 0.5);
-  playerHits++;
+function victory(player, target) {
+  battleOver = true;
+  generateText(`${target.name} ha sido derrotado por ${player.name}, Has ganado valiente ${player.name}`);
+  setTurnIndicator('Victory!');
+  setTurnControls(true);
+  document.querySelector('#reset').style.display = 'inline-flex';
+  play('enemy', { key: target.spriteKey, anim: 'death' });
+  setIdle('player', player.spriteKey);
+}
+
+function defeat(player, attacker) {
+  battleOver = true;
+  generateText(`${player.name} ha sido derrotado por ${attacker.name}, Game Over`);
+  setTurnIndicator('Defeat');
+  setTurnControls(true);
+  document.querySelector('#reset').style.display = 'inline-flex';
+  play('player', { key: player.spriteKey, anim: 'death' });
+  setIdle('enemy', attacker.spriteKey);
+}
+
+function resetGame() {
+  location.reload();
+}
+
+function startGame() {
+  setHeroStatus(hero);
+
+  document.querySelector('.actions').style.display = 'inline-flex';
+  document.querySelector('.log').style.display = 'inline-flex';
+  document.querySelector('.characters').style.display = 'inline-flex';
+  document.querySelector('#reset').style.display = 'none';
+  document.querySelector('.container').classList.add('container-battle');
+  hideRestOfHeros();
+
+  enemy = randomEnemy();
+  document.querySelector('.enemies').style.display = 'inline-flex';
+  setSpecialReady(false);
+
+  whoGoFirst(hero, enemy);
+}
+
+function whoGoFirst(unit, foe) {
+  if (unit.speed > foe.speed) {
+    generateText(`${unit.name} es más rápido, es su turno.`);
+    setTurnIndicator(`${unit.name}: Your Turn`);
+  } else {
+    setTurnControls(true);
+    generateText(`${foe.name} ha aparecido, es su turno!`);
+    setTurnIndicator(`${foe.name}: Enemy Turn`);
+    enemyAttack(foe, unit).then(() => {
+      if (!battleOver) setTurnControls(false);
+    });
+  }
+}
+
+function randomEnemy() {
+  const keys = Object.keys(ENEMIES);
+  const unit = createCombatant(ENEMIES[keys[Math.floor(Math.random() * keys.length)]]);
+  setEnemyStatus(unit);
+  return unit;
+}
+
+async function heroTurn(player, target) {
+  const playerKey = player.spriteKey;
+  const enemyKey = target.spriteKey;
+
+  setTurnIndicator(`${player.name}: Your Turn`);
+  const pending = buildHit(player, target, { useSpecial: false });
 
   await playScript('player', [
     {
@@ -304,70 +237,138 @@ async function heroTurn(player, target) {
       moveX: 46,
       hitAt: 0.6,
       onHit: () => {
-        if (Math.random() * 100 < player.criticalChance) {
-          damage = Math.max(1, Math.floor(Math.random() * player.strength) * 3 - target.defense * 0.5);
-          generateText(`${player.name} hizo un golpe crítico a ${target.name} por ${damage} de daño`);
+        const res = commitHit(pending);
+        const parts = [];
+        if (res.miss) {
+          parts.push(`${target.name} esquivó el ataque.`);
         } else {
-          generateText(`${player.name} golpeó a ${target.name} por ${damage} de daño.`);
+          if (pending.targetDefended) {
+            parts.push(`${target.name} se defendió y recibió ${res.damage} de daño.`);
+          } else if (res.isCrit) {
+            parts.push(`¡CRÍTICO! ${player.name} golpeó a ${target.name} por ${res.damage} de daño.`);
+          } else {
+            parts.push(`${player.name} golpeó a ${target.name} por ${res.damage} de daño.`);
+          }
+          applyHitVisuals(enemySprite, pending, 'enemy');
         }
-        target.health -= damage;
-        if (target.health < 0) target.health = 0;
-        document.querySelector('#enemy-hp').value = target.health;
-        flash(enemySprite);
-        slash(enemySprite);
-        particles(enemySprite);
-        damageNumber(enemySprite, damage, 'enemy');
-        shake(enemySprite.parentElement, 10);
-        screenShake();
-        if (playerHits === 7) {
-          specialUnlocked = true;
-          playerHits = 0;
+        trackHit(player, pending, parts);
+        if (res.appliedStatuses.length) {
+          parts.push(`(${statusLabel(target, res.appliedStatuses)} aplicado a ${target.name})`);
         }
+        if (res.frenzyTriggered) {
+          parts.push(`${target.name} ¡entra en FRENESÍ! (+25% de daño)`);
+        }
+        if (res.defendBonusConsumed) {
+          parts.push(`(${player.name} aprovecha el bonus de DEFENSA: +20% de daño)`);
+        }
+        generateText(parts.join(' '));
+        updateEnemyBar(target);
+        renderStatuses(target, enemyStatusEl);
       },
     },
   ]);
 
   if (target.health <= 0) {
-    battleOver = true;
-    generateText(`${target.name} ha sido derrotado por ${player.name}, Has ganado valiente ${player.name}`);
-    setTurnControls(true);
-    document.querySelector('#reset').style.display = 'inline-flex';
-    play('enemy', { key: enemyKey, anim: 'death' });
-    setIdle('player', playerKey);
+    victory(player, target);
     return;
   }
 
   await setIdle('enemy', enemyKey);
-  await enemyAttack(target, player);
+
+  const ticks = tickStatuses(player);
+  if (ticks.length) {
+    renderStatuses(player, playerStatusEl);
+    generateText(
+      `${player.name} sufre ${ticks.map((t) => `${t.damage} de ${STATUS_LABELS[t.type]}`).join(' y ')}.`
+    );
+    if (player.health <= 0) {
+      defeat(player, enemy);
+      return;
+    }
+  }
+
+  await enemyAttack(enemy, player);
 }
 
+async function playerSpecial(player, target) {
+  if (!player.specialUnlocked) return;
+  const playerKey = player.spriteKey;
+  const enemyKey = target.spriteKey;
 
+  player.specialUnlocked = false;
+  player.hits = 0;
+  setSpecialReady(false);
+  setTurnIndicator(`${player.name}: Special!`);
 
-warriorBtn.addEventListener('click', function (event) {
+  const pending = buildHit(player, target, { useSpecial: true });
+  generateText(`${player.name} usa el especial: ${player.specialName}!`);
 
-  selectHero('warrior');
-});
-hunterBtn.addEventListener('click', function (event) {
+  await playScript('player', [
+    {
+      key: playerKey,
+      anim: 'attack',
+      moveX: 46,
+      hitAt: 0.6,
+      onHit: () => {
+        const res = commitHit(pending);
+        const parts = [];
+        if (res.miss) {
+          parts.push(`${target.name} esquivó el ataque!`);
+        } else {
+          if (pending.targetDefended) {
+            parts.push(`${target.name} se defendió y recibió ${res.damage} de daño.`);
+          } else {
+            parts.push(`${player.specialName} impactó por ${res.damage} de daño.`);
+          }
+          applyHitVisuals(enemySprite, pending, 'enemy');
+        }
+        if (res.appliedStatuses.length) {
+          parts.push(`(${statusLabel(target, res.appliedStatuses)} aplicado a ${target.name})`);
+        }
+        if (res.frenzyTriggered) {
+          parts.push(`${target.name} ¡entra en FRENESÍ! (+25% de daño)`);
+        }
+        if (res.defendBonusConsumed) {
+          parts.push(`(${player.name} aprovecha el bonus de DEFENSA: +20% de daño)`);
+        }
+        generateText(parts.join(' '));
+        updateEnemyBar(target);
+        renderStatuses(target, enemyStatusEl);
+      },
+    },
+  ]);
 
-  selectHero('hunter');
-});
-mageBtn.addEventListener('click', function (event) {
+  if (target.health <= 0) {
+    victory(player, target);
+    return;
+  }
 
-  selectHero('mage');
-});
-
-function generateText(text) {
-  logText.innerHTML = '';
-
-  return (logText.innerHTML += text);
-}
-
-async function enemyAttack(enemy, heroPlayer) {
-  const playerKey = heroPlayer.characterClass;
-  const enemyKey = ENEMY_KEYS[enemy.name] || 'worm';
   await setIdle('enemy', enemyKey);
 
-  const damage = Math.max(1, Math.floor(Math.random() * enemy.strength) * 1.5 - heroPlayer.defense * 0.5);
+  const ticks = tickStatuses(player);
+  if (ticks.length) {
+    renderStatuses(player, playerStatusEl);
+    generateText(
+      `${player.name} sufre ${ticks.map((t) => `${t.damage} de ${STATUS_LABELS[t.type]}`).join(' y ')}.`
+    );
+    if (player.health <= 0) {
+      defeat(player, enemy);
+      return;
+    }
+  }
+
+  await enemyAttack(enemy, player);
+}
+
+async function enemyAttack(unit, player) {
+  const enemyKey = unit.spriteKey;
+  const playerKey = player.spriteKey;
+  const wasDefending = player.defending;
+
+  await setIdle('enemy', enemyKey);
+  setTurnIndicator(`${unit.name}: Enemy Turn`);
+
+  const pending = buildHit(unit, player, { useSpecial: false });
 
   await playScript('enemy', [
     {
@@ -376,32 +377,63 @@ async function enemyAttack(enemy, heroPlayer) {
       moveX: 12,
       hitAt: 0.6,
       onHit: () => {
-        heroPlayer.health -= damage;
-        if (heroPlayer.health < 0) heroPlayer.health = 0;
-        document.querySelector('#progresHealth').value = heroPlayer.health;
-        flash(sprite, 'rgba(255,90,77,.95)');
-        damageNumber(sprite, damage, 'player');
-        shake(sprite.parentElement, -10);
-        screenShake();
+        const res = commitHit(pending);
+        const parts = [];
+        if (res.miss) {
+          parts.push(`${player.name} esquivó el ataque de ${unit.name}.`);
+        } else {
+          if (res.isCrit) {
+            parts.push(`¡CRÍTICO! ${unit.name} golpeó a ${player.name} por ${res.damage} de daño.`);
+          } else if (pending.targetDefended) {
+            parts.push(`${unit.name} se defendió, nadie se dañó.`);
+          } else if (wasDefending) {
+            parts.push(`${unit.name} golpeó a ${player.name}, pero se defendió (${res.damage} de daño).`);
+          } else {
+            parts.push(`${unit.name} golpeó a ${player.name} por ${res.damage} de daño.`);
+          }
+          applyHitVisuals(sprite, pending, 'player');
+        }
+        if (res.appliedStatuses.length) {
+          parts.push(`(${statusLabel(player, res.appliedStatuses)} aplicado a ${player.name})`);
+        }
+        generateText(parts.join(' '));
+        updatePlayerBar(player);
+        renderStatuses(player, playerStatusEl);
       },
     },
   ]);
 
-  if (heroPlayer.health <= 0) {
-    battleOver = true;
-    generateText(`${heroPlayer.name} ha sido derrotado por ${enemy.name}, Game Over`);
-    setTurnControls(true);
-    document.querySelector('#reset').style.display = 'inline-flex';
-    play('player', { key: playerKey, anim: 'death' });
-    setIdle('enemy', enemyKey);
+  if (player.health <= 0) {
+    defeat(player, unit);
     return;
+  }
+
+  const ticks = tickStatuses(unit);
+  if (ticks.length) {
+    renderStatuses(unit, enemyStatusEl);
+    generateText(
+      `${unit.name} sufre ${ticks.map((t) => `${t.damage} de ${STATUS_LABELS[t.type]}`).join(' y ')}.`
+    );
+    if (unit.health <= 0) {
+      victory(player, unit);
+      return;
+    }
   }
 
   await setIdle('player', playerKey);
 }
-async function characterDefense(character, target) {
-  const enemyKey = ENEMY_KEYS[target.name] || 'worm';
-  generateText(`${character.name} se está defendiendo.`);
+
+async function characterDefense(player, target) {
+  const playerKey = player.spriteKey;
+  const enemyKey = target.spriteKey;
+
+  player.defending = true;
+  player.defendBonus = true;
+  setTurnIndicator(`${player.name}: Defending`);
+  generateText(`${player.name} se está defendiendo: −50% de daño y próximo ataque +20%.`);
+
+  const pending = buildHit(target, player, { useSpecial: false });
+  const wasDefending = player.defending;
 
   await playScript('enemy', [
     {
@@ -410,84 +442,70 @@ async function characterDefense(character, target) {
       moveX: 12,
       hitAt: 0.6,
       onHit: () => {
-        const damage = Math.max(1, Math.floor(Math.random() * target.strength) * 1.5 - character.defense);
-        character.health -= damage;
-        if (character.health < 0) character.health = 0;
-        document.querySelector('#progresHealth').value = character.health;
-        flash(sprite, 'rgba(140,190,255,.9)');
-        damageNumber(sprite, damage, 'player');
-        generateText(`${target.name} golpeó a ${character.name} con ${damage} daño.`);
+        const res = commitHit(pending);
+        const parts = [];
+        if (res.miss) {
+          parts.push(`${player.name} esquivó el ataque de ${target.name}.`);
+        } else if (wasDefending) {
+          parts.push(`${player.name} bloqueó el golpe de ${target.name} (${res.damage} de daño, reducido).`);
+        } else {
+          parts.push(`${target.name} golpeó a ${player.name} por ${res.damage} de daño.`);
+        }
+        applyHitVisuals(sprite, pending, 'player');
+        if (res.appliedStatuses.length) {
+          parts.push(`(${statusLabel(player, res.appliedStatuses)} aplicado a ${player.name})`);
+        }
+        generateText(parts.join(' '));
+        updatePlayerBar(player);
+        renderStatuses(player, playerStatusEl);
       },
     },
   ]);
 
-  if (character.health <= 0) {
-    battleOver = true;
-    generateText(`${character.name} ha sido derrotado por ${target.name}, Game Over`);
-    setTurnControls(true);
-    document.querySelector('#reset').style.display = 'inline-flex';
-    play('player', { key: character.characterClass, anim: 'death' });
-    setIdle('enemy', enemyKey);
-    return;
-  }
-  await setIdle('player', character.characterClass);
-}
-
-
-
-
-function randomEnemy() {
-  let enemy = enemies[Math.floor(Math.random() * enemies.length)];
-
-  setEnemyStatus(enemy);
-  return enemy;
-}
-
-async function playerSpecial(player, target) {
-  const playerKey = player.characterClass;
-  const enemyKey = ENEMY_KEYS[target.name] || 'worm';
-  const damage = player.strength * 2.5;
-  const enemyDefendNumber = Math.floor(Math.random() * 9) + 1;
-  specialUnlocked = false;
-  generateText(`${player.name} usa el especial: ${player.specialAttack}.`);
-
-  await playScript('player', [
-    {
-      key: playerKey,
-      anim: 'attack',
-      moveX: 46,
-      hitAt: 0.6,
-      onHit: () => {
-        let dmg = damage;
-        if (enemyDefendNumber === 7) dmg = Math.max(0, damage - 5);
-        target.health -= dmg;
-        if (target.health < 0) target.health = 0;
-        document.querySelector('#enemy-hp').value = target.health;
-        flash(enemySprite);
-        slash(enemySprite);
-        particles(enemySprite, 16);
-        damageNumber(enemySprite, dmg, 'enemy');
-        shake(enemySprite.parentElement, 14);
-        screenShake(10);
-      },
-    },
-  ]);
-
-  if (target.health <= 0) {
-    battleOver = true;
-    generateText(`${target.name} ha sido derrotado por ${player.name}, Has ganado valiente ${player.name}`);
-    setTurnControls(true);
-    document.querySelector('#reset').style.display = 'inline-flex';
-    play('enemy', { key: enemyKey, anim: 'death' });
-    setIdle('player', playerKey);
+  if (player.health <= 0) {
+    defeat(player, target);
     return;
   }
 
-  await setIdle('enemy', enemyKey);
-  await enemyAttack(target, player);
+  const ticks = tickStatuses(target);
+  if (ticks.length) {
+    renderStatuses(target, enemyStatusEl);
+    generateText(
+      `${target.name} sufre ${ticks.map((t) => `${t.damage} de ${STATUS_LABELS[t.type]}`).join(' y ')}.`
+    );
+    if (target.health <= 0) {
+      victory(player, target);
+      return;
+    }
+  }
+
+  await setIdle('player', playerKey);
 }
 
+document.querySelector('#attack').addEventListener('click', function () {
+  runTurn(() => heroTurn(hero, enemy));
+});
+document.querySelector('#defend').addEventListener('click', function () {
+  runTurn(() => characterDefense(hero, enemy));
+});
+document.querySelector('#special').addEventListener('click', function () {
+  runTurn(() => playerSpecial(hero, enemy));
+});
+document.querySelector('#reset').addEventListener('click', function () {
+  resetGame();
+});
+
+document.querySelector('#warrior-btn').addEventListener('click', function () {
+  selectHero('warrior');
+});
+document.querySelector('#hunter-btn').addEventListener('click', function () {
+  selectHero('hunter');
+});
+document.querySelector('#mage-btn').addEventListener('click', function () {
+  selectHero('mage');
+});
 
 document.querySelector('.actions').style.display = 'none';
 document.querySelector('.log').style.display = 'none';
 document.querySelector('.characters').style.display = 'none';
+document.querySelector('.enemies').style.display = 'none';
