@@ -1,0 +1,5 @@
+.mimic { --enemy-base: scale(-2.5, 2.5); }
+.mimic-idle   { background-image: url('../../assets/characters/enemies/Mimic/idle_transformed.png'); }
+.mimic-attack { background-image: url('../../assets/characters/enemies/Mimic/attack_1.png'); }
+.mimic-hit    { background-image: url('../../assets/characters/enemies/Mimic/hurt.png'); }
+.mimic-death  { background-image: url('../../assets/characters/enemies/Mimic/death.png'); }

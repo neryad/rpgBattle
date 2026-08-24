@@ -1,4 +1,4 @@
-.goblin { --enemy-base: scale(-1.6, 1.6); }
+.goblin { --enemy-base: scale(-2.6, 2.6); }
 .goblin-idle   { background-image: url('../../assets/characters/enemies/Goblin/Idle.png'); }
 .goblin-attack { background-image: url('../../assets/characters/enemies/Goblin/Attack.png'); }
 .goblin-hit    { background-image: url('../../assets/characters/enemies/Goblin/Take Hit.png'); }

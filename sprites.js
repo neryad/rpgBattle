@@ -9,6 +9,9 @@ export const CELLS = {
   goblin:    { w: 150, h: 150 },
   mushroom:  { w: 150, h: 150 },
   skeleton:  { w: 150, h: 150 },
+  rat:       { w: 70,  h: 70 },
+  mimic:     { w: 146, h: 146 },
+  boss:      { w: 140, h: 140 },
 };
 
 export const SPRITES = {
@@ -59,5 +62,23 @@ export const SPRITES = {
     attack: { frames: 8,  sheetW: 1200, dur: 700,  loop: false },
     hit:    { frames: 4,  sheetW: 600,  dur: 450,  loop: false },
     death:  { frames: 4,  sheetW: 600,  dur: 1000, loop: false },
+  },
+  rat: {
+    idle:   { frames: 10, sheetW: 700,  dur: 800,  loop: true },
+    attack: { frames: 12, sheetW: 840,  dur: 700,  loop: false },
+    hit:    { frames: 3,  sheetW: 210,  dur: 450,  loop: false },
+    death:  { frames: 6,  sheetW: 420,  dur: 1000, loop: false },
+  },
+  mimic: {
+    idle:   { frames: 9,  sheetW: 1314, dur: 900,  loop: true },
+    attack: { frames: 14, sheetW: 2044, dur: 750,  loop: false },
+    hit:    { frames: 3,  sheetW: 438,  dur: 450,  loop: false },
+    death:  { frames: 6,  sheetW: 876,  dur: 1000, loop: false },
+  },
+  boss: {
+    idle:   { frames: 10, sheetW: 1400, dur: 800,  loop: true },
+    attack: { frames: 13, sheetW: 1820, dur: 800,  loop: false },
+    hit:    { frames: 3,  sheetW: 420,  dur: 450,  loop: false },
+    death:  { frames: 18, sheetW: 2520, dur: 1200, loop: false },
   },
 };

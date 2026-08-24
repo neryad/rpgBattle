@@ -185,12 +185,14 @@ test('el enemigo no entra en Frenesí si no cruza el umbral', () => {
   assert.equal(hasFrenzy(worn), false);
 });
 
-test('los enemigos con rol definido usan sus stats reales (skeleton crit, mushroom poison)', () => {
+test('los enemigos con rol definido usan sus stats reales (skeleton crit, mushroom poison, rat speed, mimic)', () => {
   assert.equal(ENEMIES.skeleton.criticalChance, 15);
   assert.equal(ENEMIES.mushroom.maxHealth, 120);
   assert.equal(ENEMIES.mushroom.defense, 14);
   assert.equal(ENEMIES.worn.maxHealth, 75);
   assert.equal(ENEMIES.flyingEye.evasion, 20);
+  assert.equal(ENEMIES.rat.speed, 18);
+  assert.equal(ENEMIES.mimic.maxHealth, 95);
 });
 
 test('mushroom puede aplicar Poison en su ataque', () => {
@@ -200,4 +202,12 @@ test('mushroom puede aplicar Poison en su ataque', () => {
   assert.equal(pending.statuses.some((s) => s.type === 'poison'), true);
   commitHit(pending);
   assert.equal(hero.statusEffects.some((s) => s.type === 'poison'), true);
+});
+
+test('mimic puede aplicar Bleed o Poison en su ataque', () => {
+  const mimic = createCombatant(ENEMIES.mimic);
+  const hero = createCombatant(HEROES.warrior);
+  const pending = buildHit(mimic, hero, {}, seq(0.5, 0.5, 0.9, 0.0, 0.0));
+  assert.equal(pending.statuses.length, 1);
+  assert.equal(pending.statuses[0].type, 'bleed');
 });

@@ -4,10 +4,13 @@ const PREFIXES = Object.keys(SPRITES);
 
 let playerEl = null;
 let enemyEl = null;
+let speedMultiplier = 1.0;
 const running = new Set();
 
 export function setPlayerEl(el) { playerEl = el; }
 export function setEnemyEl(el) { enemyEl = el; }
+export function setSpeedMultiplier(mult) { speedMultiplier = Math.max(0.5, Math.min(3, mult)); }
+export function getSpeedMultiplier() { return speedMultiplier; }
 
 function elOf(entity) { return entity === 'player' ? playerEl : enemyEl; }
 
@@ -25,13 +28,14 @@ function clearAnimClasses(el) {
 
 function applyAnim(el, key, anim, cfg) {
   clearAnimClasses(el);
+  const dur = Math.max(50, Math.round(cfg.dur / speedMultiplier));
   el.classList.add('sprite-anim-base', `${key}-${anim}`, cfg.loop ? 'sprite-loop' : 'sprite-one');
   el.style.setProperty('--frames', String(cfg.frames));
   el.style.setProperty('--steps', String(cfg.frames - 1));
   el.style.setProperty('--cell-w', `${(CELLS[key] && CELLS[key].w) || 0}px`);
   el.style.setProperty('--cell-h', `${(CELLS[key] && CELLS[key].h) || 0}px`);
   el.style.setProperty('--sheet-w', `${cfg.sheetW}px`);
-  el.style.setProperty('--dur', `${cfg.dur}ms`);
+  el.style.setProperty('--dur', `${dur}ms`);
   void el.offsetWidth;
 }
 
@@ -59,6 +63,16 @@ export async function play(entity, step) {
   return playScript(entity, [step]);
 }
 
+export async function playHit(entity, key) {
+  const el = elOf(entity);
+  if (!el) return;
+  const cfg = SPRITES[key] && SPRITES[key].hit;
+  if (!cfg) return;
+  applyAnim(el, key, 'hit', cfg);
+  await sleep(Math.round(cfg.dur / speedMultiplier));
+  await setIdle(entity, key);
+}
+
 export async function playScript(entity, steps) {
   if (running.has(entity)) return;
   running.add(entity);
@@ -72,15 +86,17 @@ export async function playScript(entity, steps) {
         continue;
       }
       applyAnim(el, step.key, step.anim, cfg);
+      const effectiveDur = Math.round(cfg.dur / speedMultiplier);
       const dir = entity === 'player' ? 1 : -1;
       const moveX = step.moveX || 0;
       const hitAt = step.hitAt != null ? step.hitAt : 1;
-      const rest = cfg.dur * (1 - hitAt);
+      const hitTime = Math.round(effectiveDur * hitAt);
+      const rest = effectiveDur - hitTime;
       if (moveX) {
         el.classList.add('motion');
         el.style.transform = `${baseTransform(entity)} translateX(${dir * moveX}px)`;
       }
-      await sleep(cfg.dur * hitAt);
+      await sleep(hitTime);
       if (step.onHit) step.onHit();
       if (moveX) {
         el.style.transform = baseTransform(entity);
@@ -88,6 +104,13 @@ export async function playScript(entity, steps) {
         el.classList.remove('motion');
       } else {
         await sleep(rest);
+      }
+    }
+    const lastStep = steps[steps.length - 1];
+    if (lastStep && lastStep.anim !== 'death') {
+      const idleCfg = SPRITES[lastStep.key] && SPRITES[lastStep.key].idle;
+      if (idleCfg) {
+        applyAnim(el, lastStep.key, 'idle', idleCfg);
       }
     }
   } finally {

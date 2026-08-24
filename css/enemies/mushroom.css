@@ -1,4 +1,4 @@
-.mushroom { --enemy-base: scale(-1.6, 1.6); }
+.mushroom { --enemy-base: scale(-2.6, 2.6); }
 .mushroom-idle   { background-image: url('../../assets/characters/enemies/Mushroom/Idle.png'); }
 .mushroom-attack { background-image: url('../../assets/characters/enemies/Mushroom/Attack.png'); }
 .mushroom-hit    { background-image: url('../../assets/characters/enemies/Mushroom/Take Hit.png'); }

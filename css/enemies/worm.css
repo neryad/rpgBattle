@@ -1,3 +1,4 @@
+.worm { --enemy-base: scale(-2.8, 2.8); }
 .worm-idle   { background-image: url('../../assets/characters/enemies/Worm/Idle.png'); }
 .worm-attack { background-image: url('../../assets/characters/enemies/Worm/Attack.png'); }
 .worm-hit    { background-image: url('../../assets/characters/enemies/Worm/GetHit.png'); }

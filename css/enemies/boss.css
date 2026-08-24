@@ -1,0 +1,5 @@
+.boss { --enemy-base: scale(-2.8, 2.8); }
+.boss-idle   { background-image: url('../../assets/characters/enemies/Evil Wizard 3/Sprites/Idle.png'); }
+.boss-attack { background-image: url('../../assets/characters/enemies/Evil Wizard 3/Sprites/Attack.png'); }
+.boss-hit    { background-image: url('../../assets/characters/enemies/Evil Wizard 3/Sprites/Get hit.png'); }
+.boss-death  { background-image: url('../../assets/characters/enemies/Evil Wizard 3/Sprites/Death.png'); }

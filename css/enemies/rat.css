@@ -1,0 +1,5 @@
+.rat { --enemy-base: scale(-3.0, 3.0); }
+.rat-idle   { background-image: url('../../assets/characters/enemies/Rat/idle.png'); }
+.rat-attack { background-image: url('../../assets/characters/enemies/Rat/attack_bite.png'); }
+.rat-hit    { background-image: url('../../assets/characters/enemies/Rat/hurt.png'); }
+.rat-death  { background-image: url('../../assets/characters/enemies/Rat/rat-death.png'); }

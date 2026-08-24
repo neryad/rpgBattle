@@ -97,6 +97,119 @@ const poisonSpores = {
   },
 };
 
+const warriorWarcry = {
+  magic: false,
+  compute(attacker, target, rng) {
+    return {
+      damage: physicalDamage(attacker, target, rng, 1.2, 0.5),
+      damageType: 'physical',
+      statuses: [],
+      grantDefenseBuff: 2,
+    };
+  },
+};
+
+const arcaneBarrierSkill = {
+  magic: true,
+  compute(attacker, target, rng) {
+    return {
+      damage: magicDamage(attacker, rng, 1.2),
+      damageType: 'magic',
+      statuses: [],
+      grantBarrier: Math.max(12, Math.round((attacker.intelligence || 20) * 0.8)),
+    };
+  },
+};
+
+const poisonTrapSkill = {
+  magic: false,
+  compute(attacker, target, rng) {
+    return {
+      damage: physicalDamage(attacker, target, rng, 1.3, 0.5),
+      damageType: 'physical',
+      statuses: [{ type: 'poison', duration: 3, damage: 4 }],
+    };
+  },
+};
+
+export const RELICS = {
+  vampire_fang: {
+    key: 'vampire_fang',
+    name: 'Colmillo Vampírico',
+    icon: '🧛',
+    desc: 'Cura un 15% del daño infligido.',
+  },
+  shadow_cloak: {
+    key: 'shadow_cloak',
+    name: 'Capa de Sombras',
+    icon: '🥋',
+    desc: '+10% a la Evasión permanente.',
+  },
+  whetstone: {
+    key: 'whetstone',
+    name: 'Piedra de Afilar',
+    icon: '⚔️',
+    desc: '+10% a la Probabilidad de Crítico.',
+  },
+  thorn_shield: {
+    key: 'thorn_shield',
+    name: 'Escudo de Espinas',
+    icon: '🛡️',
+    desc: 'Devuelve 6 de daño al enemigo cuando te defiendes.',
+  },
+  fury_ring: {
+    key: 'fury_ring',
+    name: 'Anillo de Furia',
+    icon: '💍',
+    desc: '+25% de daño con vida menor al 35%.',
+  },
+};
+
+const ratBite = {
+  magic: false,
+  compute(attacker, target, rng) {
+    return {
+      damage: physicalDamage(attacker, target, rng, 1.4, 0.5),
+      damageType: 'physical',
+      statuses: [],
+    };
+  },
+};
+
+const mimicChomp = {
+  magic: false,
+  compute(attacker, target, rng) {
+    const res = {
+      damage: physicalDamage(attacker, target, rng, 1.6, 0.6),
+      damageType: 'physical',
+      statuses: [],
+    };
+    if (rng() < 0.25) {
+      if (rng() < 0.5) {
+        res.statuses.push({ type: 'bleed', duration: 3, damage: 4 });
+      } else {
+        res.statuses.push({ type: 'poison', duration: 3, damage: 4 });
+      }
+    }
+    return res;
+  },
+};
+
+const bossStrike = {
+  magic: true,
+  compute(attacker, target, rng) {
+    const res = {
+      damage: magicDamage(attacker, rng, 1.5),
+      damageType: 'magic',
+      statuses: [],
+    };
+    if (rng() < 0.25) {
+      res.statuses.push({ type: 'burn', duration: 3, damage: 5 });
+    }
+    return res;
+  },
+};
+
 export const HEROES = {
   warrior: {
     key: 'warrior',
@@ -105,6 +218,8 @@ export const HEROES = {
     spriteKey: 'warrior',
     role: 'Tank / Melee',
     specialName: 'Sword Slash',
+    secondaryName: 'Grito de Guerra',
+    secondaryDesc: 'Golpea y reduce el daño recibido un 30% por 2 turnos (recarga: 3 turnos).',
     maxHealth: 120,
     strength: 16,
     defense: 16,
@@ -112,7 +227,7 @@ export const HEROES = {
     intelligence: 8,
     criticalChance: 10,
     evasion: 5,
-    abilities: { basic: basicStrike, special: swordSlash },
+    abilities: { basic: basicStrike, secondary: warriorWarcry, special: swordSlash },
   },
   mage: {
     key: 'mage',
@@ -121,6 +236,8 @@ export const HEROES = {
     spriteKey: 'mage',
     role: 'Magic DPS / Debuff',
     specialName: 'Fireball Meteor',
+    secondaryName: 'Barrera Arcana',
+    secondaryDesc: 'Golpea y genera un escudo mágico que absorbe daño (recarga: 3 turnos).',
     maxHealth: 70,
     strength: 8,
     defense: 10,
@@ -128,7 +245,7 @@ export const HEROES = {
     intelligence: 20,
     criticalChance: 8,
     evasion: 8,
-    abilities: { basic: mageBolt, special: fireballMeteor },
+    abilities: { basic: mageBolt, secondary: arcaneBarrierSkill, special: fireballMeteor },
   },
   hunter: {
     key: 'hunter',
@@ -137,6 +254,8 @@ export const HEROES = {
     spriteKey: 'hunter',
     role: 'Physical DPS / Crit / Evasion',
     specialName: 'Arrow of Blood',
+    secondaryName: 'Trampa Venenosa',
+    secondaryDesc: 'Disparo que envenena 100% al objetivo por 3 turnos (recarga: 3 turnos).',
     maxHealth: 90,
     strength: 14,
     defense: 11,
@@ -144,11 +263,26 @@ export const HEROES = {
     intelligence: 12,
     criticalChance: 20,
     evasion: 15,
-    abilities: { basic: basicStrike, special: arrowOfBlood },
+    abilities: { basic: basicStrike, secondary: poisonTrapSkill, special: arrowOfBlood },
   },
 };
 
 export const ENEMIES = {
+  rat: {
+    key: 'rat',
+    name: 'Rata de Mazmorra',
+    characterClass: 'enemy',
+    spriteKey: 'rat',
+    role: 'Rápida / Ágil',
+    maxHealth: 65,
+    strength: 14,
+    defense: 6,
+    speed: 18,
+    intelligence: 4,
+    criticalChance: 5,
+    evasion: 12,
+    abilities: { basic: ratBite },
+  },
   worn: {
     key: 'worn',
     name: 'Worn',
@@ -224,6 +358,39 @@ export const ENEMIES = {
     evasion: 5,
     abilities: { basic: basicStrike },
   },
+  mimic: {
+    key: 'mimic',
+    name: 'Mímico',
+    characterClass: 'enemy',
+    spriteKey: 'mimic',
+    role: 'Tanque / Emboscada',
+    maxHealth: 95,
+    strength: 17,
+    defense: 10,
+    speed: 9,
+    intelligence: 8,
+    criticalChance: 10,
+    evasion: 6,
+    abilities: { basic: mimicChomp },
+  },
+};
+
+export const BOSSES = {
+  boss: {
+    key: 'boss',
+    name: 'Hechicero Oscuro',
+    characterClass: 'enemy',
+    spriteKey: 'boss',
+    role: 'Boss / Mago Supremo',
+    maxHealth: 210,
+    strength: 14,
+    defense: 12,
+    speed: 12,
+    intelligence: 22,
+    criticalChance: 10,
+    evasion: 8,
+    abilities: { basic: bossStrike },
+  },
 };
 
 export function getEnemyKey(name) {
@@ -234,7 +401,11 @@ export function getEnemyKey(name) {
 }
 
 export function computeEvasion(unit) {
-  return Math.min(MAX_EVASION, (unit.evasion || 0) + (unit.speed || 0) * 0.5);
+  let eva = (unit.evasion || 0) + (unit.speed || 0) * 0.5;
+  if (unit.relics && unit.relics.includes('shadow_cloak')) {
+    eva += 10;
+  }
+  return Math.min(MAX_EVASION, eva);
 }
 
 export function createCombatant(def) {
@@ -246,12 +417,17 @@ export function createCombatant(def) {
     defending: false,
     defendBonus: false,
     statusEffects: [],
+    secondaryCooldown: 0,
+    relics: def.relics ? [...def.relics] : [],
+    barrier: 0,
+    defenseBuffTurns: 0,
   };
 }
 
-function getAbility(unit, useSpecial) {
+function getAbility(unit, actionType) {
   const abilities = unit.abilities || {};
-  if (useSpecial && abilities.special) return abilities.special;
+  if (actionType === 'special' && abilities.special) return abilities.special;
+  if (actionType === 'secondary' && abilities.secondary) return abilities.secondary;
   return abilities.basic;
 }
 
@@ -260,10 +436,13 @@ export function hasFrenzy(unit) {
 }
 
 export function buildHit(attacker, target, opts = {}, rng = Math.random) {
+  const actionType = opts.actionType || (opts.useSpecial ? 'special' : opts.useSecondary ? 'secondary' : 'basic');
   const pending = {
     attacker,
     target,
-    useSpecial: !!opts.useSpecial,
+    actionType,
+    useSpecial: actionType === 'special',
+    useSecondary: actionType === 'secondary',
     miss: false,
     evaded: false,
     isCrit: false,
@@ -273,6 +452,8 @@ export function buildHit(attacker, target, opts = {}, rng = Math.random) {
     statuses: [],
     targetDefended: false,
     defendBonusConsumed: false,
+    grantBarrier: 0,
+    grantDefenseBuff: 0,
   };
 
   if (target.characterClass === 'enemy' && rng() < ENEMY_DEFEND_CHANCE) {
@@ -285,21 +466,30 @@ export function buildHit(attacker, target, opts = {}, rng = Math.random) {
     return pending;
   }
 
-  const ability = getAbility(attacker, pending.useSpecial);
-  const critChance = (attacker.criticalChance || 0) + (ability.extraCrit || 0);
+  const ability = getAbility(attacker, actionType);
+  let critChance = (attacker.criticalChance || 0) + (ability.extraCrit || 0);
+  if (attacker.relics && attacker.relics.includes('whetstone')) {
+    critChance += 10;
+  }
   pending.isCrit = rng() * 100 < critChance;
 
   const result = ability.compute(attacker, target, rng);
   pending.rawDamage = result.damage;
   pending.damageType = result.damageType || 'physical';
   pending.statuses = result.statuses || [];
+  if (result.grantBarrier) pending.grantBarrier = result.grantBarrier;
+  if (result.grantDefenseBuff) pending.grantDefenseBuff = result.grantDefenseBuff;
 
   let dmg = result.damage;
   if (pending.targetDefended) dmg *= 1 - DEFEND_REDUCTION;
   if (target.defending) dmg *= 1 - DEFEND_REDUCTION;
+  if (target.defenseBuffTurns > 0) dmg *= 0.70;
   if (attacker.defendBonus) {
     dmg *= DEFEND_BONUS;
     pending.defendBonusConsumed = true;
+  }
+  if (attacker.relics && attacker.relics.includes('fury_ring') && attacker.health < attacker.maxHealth * 0.35) {
+    dmg *= 1.25;
   }
   if (hasFrenzy(attacker)) dmg *= FRENZY_DAMAGE_MULT;
   if (pending.isCrit) dmg *= CRIT_MULTIPLIER;
@@ -335,20 +525,54 @@ export function commitHit(pending) {
     evaded: pending.evaded,
     isCrit: pending.isCrit,
     damage: pending.miss ? 0 : pending.damage,
+    rawDamage: pending.rawDamage,
     damageType: pending.damageType,
     targetDefended: pending.targetDefended,
     defendBonusConsumed: pending.defendBonusConsumed,
     appliedStatuses: [],
     frenzyTriggered: false,
     killed: false,
+    absorbed: 0,
+    vampireHeal: 0,
+    thornReflected: 0,
+    gainedBarrier: pending.grantBarrier || 0,
+    gainedDefenseBuff: !!pending.grantDefenseBuff,
   };
 
   if (target.defending) target.defending = false;
   if (pending.defendBonusConsumed) attacker.defendBonus = false;
 
+  if (pending.grantBarrier) {
+    attacker.barrier = (attacker.barrier || 0) + pending.grantBarrier;
+  }
+  if (pending.grantDefenseBuff) {
+    attacker.defenseBuffTurns = pending.grantDefenseBuff;
+  }
+
   if (pending.miss) return res;
 
-  target.health = Math.max(0, (target.health || 0) - pending.damage);
+  let finalDmg = pending.damage;
+  if (target.barrier > 0 && finalDmg > 0) {
+    const absorb = Math.min(target.barrier, finalDmg);
+    target.barrier -= absorb;
+    finalDmg -= absorb;
+    res.absorbed = absorb;
+  }
+
+  target.health = Math.max(0, (target.health || 0) - finalDmg);
+  res.damage = finalDmg;
+
+  if (attacker.relics && attacker.relics.includes('vampire_fang') && finalDmg > 0) {
+    const healAmount = Math.max(1, Math.round(finalDmg * 0.15));
+    attacker.health = Math.min(attacker.maxHealth, attacker.health + healAmount);
+    res.vampireHeal = healAmount;
+  }
+
+  if (target.defending && target.relics && target.relics.includes('thorn_shield')) {
+    attacker.health = Math.max(0, attacker.health - 6);
+    res.thornReflected = 6;
+  }
+
   for (const st of pending.statuses) {
     applyStatus(target, st);
     res.appliedStatuses.push({ type: st.type, duration: st.duration, damage: st.damage });
@@ -360,6 +584,9 @@ export function commitHit(pending) {
 
 export function tickStatuses(unit) {
   const ticks = [];
+  if (unit.defenseBuffTurns > 0) {
+    unit.defenseBuffTurns -= 1;
+  }
   for (const st of unit.statusEffects) {
     if (st.duration === -1 || (st.damage || 0) <= 0) continue;
     unit.health = Math.max(0, (unit.health || 0) - st.damage);

@@ -11,11 +11,14 @@
     <link rel="stylesheet" href="./css/heros/hunter.css" />
     <link rel="stylesheet" href="./css/heros/warrior.css" />
     <link rel="stylesheet" href="./css/heros/mage.css" />
-    <link rel="stylesheet" href="./css/enemines/worn.css" />
-    <link rel="stylesheet" href="./css/enemines/flyingeye.css" />
-    <link rel="stylesheet" href="./css/enemines/goblin.css" />
-    <link rel="stylesheet" href="./css/enemines/mushroom.css" />
-    <link rel="stylesheet" href="./css/enemines/skeleton.css" />
+    <link rel="stylesheet" href="./css/enemies/worm.css" />
+    <link rel="stylesheet" href="./css/enemies/flyingeye.css" />
+    <link rel="stylesheet" href="./css/enemies/goblin.css" />
+    <link rel="stylesheet" href="./css/enemies/mushroom.css" />
+    <link rel="stylesheet" href="./css/enemies/skeleton.css" />
+    <link rel="stylesheet" href="./css/enemies/rat.css" />
+    <link rel="stylesheet" href="./css/enemies/mimic.css" />
+    <link rel="stylesheet" href="./css/enemies/boss.css" />
     <title>Dungeons &amp; Code</title>
   </head>
   <body>
@@ -120,6 +123,7 @@
             </div>
 
             <div class="battle-center">
+              <div id="floor-banner" class="floor-banner">PISO 1/5</div>
               <div id="turn-indicator" class="turn-indicator">Your Turn</div>
               <div class="special-meter" id="special-meter">
                 <span class="meter-label">Special</span>
@@ -173,6 +177,40 @@
           </div>
         </section>
       </main>
+    </div>
+
+    <!-- ============ REWARD SCREEN ============ -->
+    <div id="reward-screen" class="overlay" style="display:none">
+      <div class="overlay-panel">
+        <h2 class="overlay-title">Recompensa</h2>
+        <p class="overlay-subtitle">Elige una mejora</p>
+        <div class="reward-cards"></div>
+        <button class="reward-continue action-btn" disabled>CONTINUAR</button>
+      </div>
+    </div>
+
+    <!-- ============ VICTORY SCREEN ============ -->
+    <div id="victory-screen" class="overlay" style="display:none">
+      <div class="overlay-panel">
+        <h2 class="overlay-title overlay-title--victory">¡Has conquistado la mazmorra!</h2>
+        <div class="summary">
+          <div class="summary-row"><span>Pisos completados:</span><span class="summary-floors">5</span></div>
+          <div class="summary-row"><span>Enemigos derrotados:</span><span class="summary-kills">0</span></div>
+        </div>
+        <button id="victory-restart" class="action-btn action-btn--reset">Jugar de nuevo</button>
+      </div>
+    </div>
+
+    <!-- ============ GAME OVER SCREEN ============ -->
+    <div id="gameover-screen" class="overlay" style="display:none">
+      <div class="overlay-panel">
+        <h2 class="overlay-title overlay-title--defeat">Has muerto en la mazmorra</h2>
+        <div class="summary">
+          <div class="summary-row"><span>Piso alcanzado:</span><span class="summary-floors">1</span></div>
+          <div class="summary-row"><span>Enemigos derrotados:</span><span class="summary-kills">0</span></div>
+        </div>
+        <button id="gameover-restart" class="action-btn action-btn--reset">Intentar de nuevo</button>
+      </div>
     </div>
 
     <script src="app.js" defer type="module"></script>
